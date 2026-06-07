@@ -9,6 +9,17 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://disciplineos_user:disciplineos_dev_123@localhost:5432/disciplineos?schema=public
+      DIRECT_URL: postgresql://disciplineos_user:disciplineos_dev_123@localhost:5432/disciplineos?schema=public
+      CORS_ORIGIN: http://localhost:3000
+      JWT_SECRET: ci-development-secret-minimum-32-characters
+      JWT_EXPIRATION: 3600
+      SWAGGER_ENABLED: true
+      NEXT_PUBLIC_APP_NAME: DisciplineOS AI
+      NEXT_PUBLIC_APP_DESCRIPTION: AI-powered discipline, goals, habits, and accountability partners.
+      NEXT_PUBLIC_API_URL: http://localhost:4000/api/v1
 
     steps:
       - name: Checkout
@@ -17,6 +28,11 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -24,16 +40,16 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: corepack pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma Client
-        run: corepack pnpm --filter @disciplineos/api prisma:generate
+        run: pnpm --filter @disciplineos/api prisma:generate
 
       - name: Typecheck
-        run: corepack pnpm typecheck
+        run: pnpm typecheck
 
       - name: Lint
-        run: corepack pnpm lint
+        run: pnpm lint
 
       - name: Build
-        run: corepack pnpm build
+        run: pnpm build
