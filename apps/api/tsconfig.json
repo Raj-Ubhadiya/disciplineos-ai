@@ -1,14 +1,13 @@
 {
   "extends": "../../packages/config/tsconfig/nestjs.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "ignoreDeprecations": "5.0",
     "composite": true,
     "outDir": "dist",
     "rootDir": "../..",
     "paths": {
-      "@disciplineos/config": ["../../packages/config/src/index.ts"],
-      "@disciplineos/types": ["../../packages/types/src/index.ts"]
+      "@disciplineos/config": ["./../../packages/config/src/index.ts"],
+      "@disciplineos/types": ["./../../packages/types/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts", "../../packages/config/src/**/*.ts", "../../packages/types/src/**/*.ts"]

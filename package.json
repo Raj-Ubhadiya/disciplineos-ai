@@ -44,7 +44,7 @@
     "prettier": "latest",
     "tsc-alias": "latest",
     "ts-node": "latest",
-    "typescript": "latest",
+    "typescript": "5.9.3",
     "typescript-eslint": "latest"
   }
 }
