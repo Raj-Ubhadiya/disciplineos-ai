@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: disciplineos-api
+    runtime: node
+    plan: starter
+    buildCommand: corepack enable && corepack pnpm install --frozen-lockfile && corepack pnpm --filter @disciplineos/api prisma:generate && corepack pnpm --filter @disciplineos/api build
+    startCommand: corepack pnpm --filter @disciplineos/api start:prod
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRATION
+        value: 3600
+      - key: SWAGGER_ENABLED
+        value: false
+      - key: OPENAI_API_KEY
+        sync: false

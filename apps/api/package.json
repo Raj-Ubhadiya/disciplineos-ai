@@ -1,0 +1,44 @@
+{
+  "name": "@disciplineos/api",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "start": "node dist/apps/api/src/main.js",
+    "start:prod": "node dist/apps/api/src/main.js",
+    "lint": "eslint src ../../packages/config/src ../../packages/types/src --ext .ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:status": "prisma migrate status"
+  },
+  "dependencies": {
+    "@disciplineos/config": "workspace:*",
+    "@disciplineos/types": "workspace:*",
+    "@nestjs/common": "latest",
+    "@nestjs/config": "latest",
+    "@nestjs/core": "latest",
+    "@nestjs/jwt": "latest",
+    "@nestjs/passport": "latest",
+    "@nestjs/platform-express": "latest",
+    "@nestjs/swagger": "latest",
+    "@prisma/client": "^6.19.0",
+    "bcrypt": "latest",
+    "class-transformer": "latest",
+    "class-validator": "latest",
+    "helmet": "latest",
+    "passport": "latest",
+    "passport-jwt": "latest",
+    "prisma": "^6.19.0",
+    "reflect-metadata": "latest",
+    "rxjs": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "latest",
+    "@types/bcrypt": "latest",
+    "@types/passport-jwt": "latest"
+  }
+}

@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: disciplineos-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: disciplineos
+      POSTGRES_USER: disciplineos_user
+      POSTGRES_PASSWORD: disciplineos_dev_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U disciplineos_user -d disciplineos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:

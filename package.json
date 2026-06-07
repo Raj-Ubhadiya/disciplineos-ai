@@ -1,0 +1,50 @@
+{
+  "name": "disciplineos-ai",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@prisma/client",
+      "@prisma/engines",
+      "@scarf/scarf",
+      "bcrypt",
+      "prisma",
+      "sharp"
+    ]
+  },
+  "scripts": {
+    "dev": "corepack pnpm -r --parallel --filter @disciplineos/api --filter @disciplineos/web dev",
+    "build": "corepack pnpm --filter @disciplineos/types build && corepack pnpm --filter @disciplineos/config build && corepack pnpm --filter @disciplineos/api build && corepack pnpm --filter @disciplineos/web build",
+    "lint": "corepack pnpm --filter @disciplineos/types lint && corepack pnpm --filter @disciplineos/config lint && corepack pnpm --filter @disciplineos/api lint && corepack pnpm --filter @disciplineos/web lint",
+    "typecheck": "corepack pnpm --filter @disciplineos/types typecheck && corepack pnpm --filter @disciplineos/config typecheck && corepack pnpm --filter @disciplineos/api typecheck && corepack pnpm --filter @disciplineos/web typecheck",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "db:generate": "corepack pnpm --filter @disciplineos/api prisma:generate",
+    "db:migrate": "corepack pnpm --filter @disciplineos/api prisma:migrate",
+    "db:deploy": "corepack pnpm --filter @disciplineos/api prisma:deploy",
+    "db:status": "corepack pnpm --filter @disciplineos/api prisma:status",
+    "verify": "corepack pnpm typecheck && corepack pnpm lint && corepack pnpm build"
+  },
+  "devDependencies": {
+    "@eslint/js": "latest",
+    "@next/eslint-plugin-next": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-prettier": "latest",
+    "eslint-plugin-simple-import-sort": "latest",
+    "globals": "latest",
+    "prettier": "latest",
+    "tsc-alias": "latest",
+    "ts-node": "latest",
+    "typescript": "latest",
+    "typescript-eslint": "latest"
+  }
+}
