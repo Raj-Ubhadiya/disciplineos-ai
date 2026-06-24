@@ -1,4 +1,5 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 import type { AuthenticatedUser } from '../auth';
 import { PrismaService } from '../prisma.service';
@@ -102,7 +103,7 @@ export class HabitsService {
       throw new BadRequestException('Habit already completed today');
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    return this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const completion = await tx.habitCompletion.create({
         data: {
           habitId: id,

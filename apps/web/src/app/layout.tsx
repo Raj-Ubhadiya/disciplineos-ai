@@ -24,8 +24,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={`${plusJakarta.variable} ${ibmPlexMono.variable}`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        className={`${plusJakarta.variable} ${ibmPlexMono.variable} antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

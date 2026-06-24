@@ -1,8 +1,15 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import type { Prisma } from '@prisma/client';
 
 import type { AuthenticatedUser } from '../auth';
 import { PrismaService } from '../prisma.service';
 import type { CreateFocusSessionDto } from './dto';
+
+type FocusSessionRecord = {
+  durationMinutes: number;
+  distractionFree: boolean;
+  title: string;
+};
 
 @Injectable()
 export class FocusSessionsService {
@@ -54,14 +61,14 @@ export class FocusSessionsService {
       where: { userId: user.id },
       orderBy: { startedAt: 'desc' },
       take: 30,
-    });
+    }) as FocusSessionRecord[];
 
     const totalMinutes = sessions.reduce(
-      (total, session) => total + session.durationMinutes,
+      (total: number, session: FocusSessionRecord) => total + session.durationMinutes,
       0,
     );
     const distractionFreeSessions = sessions.filter(
-      (session) => session.distractionFree,
+      (session: FocusSessionRecord) => session.distractionFree,
     ).length;
 
     return {

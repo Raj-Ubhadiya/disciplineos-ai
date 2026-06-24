@@ -3,6 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import type { AuthenticatedUser } from '../auth';
 import { PrismaService } from '../prisma.service';
 
+type HabitStreak = { currentStreak: number };
+type DistractionLogRecord = { platform: string; minutesLost: number };
+type FocusSessionRecord = { durationMinutes: number; distractionFree: boolean };
+type DailyReflectionRecord = { focusScore: number };
+
 @Injectable()
 export class AnalyticsService {
   constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
@@ -43,32 +48,50 @@ export class AnalyticsService {
         orderBy: { createdAt: 'desc' },
         take: 14,
       }),
-    ]);
+    ]) as [
+      number,
+      number,
+      HabitStreak[],
+      number,
+      DistractionLogRecord[],
+      number,
+      number,
+      FocusSessionRecord[],
+      DailyReflectionRecord[],
+    ];
 
     const totalHabits = habits.length;
-    const totalStreak = habits.reduce((total, habit) => total + habit.currentStreak, 0);
+    const totalStreak = habits.reduce(
+      (total: number, habit: HabitStreak) => total + habit.currentStreak,
+      0,
+    );
     const distractionMinutesLost = distractionLogs.reduce(
-      (total, log) => total + log.minutesLost,
+      (total: number, log: DistractionLogRecord) => total + log.minutesLost,
       0,
     );
     const focusSessionMinutes = focusSessions.reduce(
-      (total, session) => total + session.durationMinutes,
+      (total: number, session: FocusSessionRecord) => total + session.durationMinutes,
       0,
     );
     const distractionFreeFocusSessions = focusSessions.filter(
-      (session) => session.distractionFree,
+      (session: FocusSessionRecord) => session.distractionFree,
     ).length;
     const averageReflectionScore =
       dailyReflections.length > 0
         ? Math.round(
-            dailyReflections.reduce((total, reflection) => total + reflection.focusScore, 0) /
-              dailyReflections.length,
+            dailyReflections.reduce(
+              (total: number, reflection: DailyReflectionRecord) => total + reflection.focusScore,
+              0,
+            ) / dailyReflections.length,
           )
         : 0;
-    const platformTotals = distractionLogs.reduce<Record<string, number>>((totals, log) => {
-      totals[log.platform] = (totals[log.platform] ?? 0) + log.minutesLost;
-      return totals;
-    }, {});
+    const platformTotals = distractionLogs.reduce(
+      (totals: Record<string, number>, log: DistractionLogRecord) => {
+        totals[log.platform] = (totals[log.platform] ?? 0) + log.minutesLost;
+        return totals;
+      },
+      {} as Record<string, number>,
+    );
     const topDistractionPlatform =
       Object.entries(platformTotals).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 

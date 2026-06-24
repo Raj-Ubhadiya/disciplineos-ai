@@ -19,6 +19,7 @@ export interface AppMetadata {
 export interface AuthUser {
   id: string;
   email: string;
+  phone: string | null;
   name: string | null;
   role: UserRole;
 }
@@ -27,6 +28,13 @@ export interface AuthResponse {
   accessToken: string;
   user: AuthUser;
 }
+
+export interface OtpRequestResponse {
+  message: string;
+  debugCode?: string;
+}
+
+export type OtpChannel = 'email' | 'phone';
 
 export type GoalCategory =
   | 'career'

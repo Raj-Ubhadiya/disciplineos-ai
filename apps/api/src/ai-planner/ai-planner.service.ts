@@ -1,4 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 import type { AuthenticatedUser } from '../auth';
 import { PrismaService } from '../prisma.service';
@@ -73,7 +74,7 @@ export class AiPlannerService {
     const suggestedGoals = aiPlan.suggestedGoals as SuggestedGoal[];
     const suggestedHabits = aiPlan.suggestedHabits as SuggestedHabit[];
 
-    return this.prisma.$transaction(async (tx) => {
+    return this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const createdGoals = await Promise.all(
         suggestedGoals.slice(0, 3).map((goal) =>
           tx.goal.create({
