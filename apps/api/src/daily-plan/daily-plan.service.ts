@@ -3,11 +3,51 @@ import { Inject, Injectable } from '@nestjs/common';
 import type { AuthenticatedUser } from '../auth';
 import { PrismaService } from '../prisma.service';
 
+type UserProfileRecord = {
+  mainDream: string | null;
+  dailyFocusMinutes: number | null;
+};
+
+type HabitRecord = {
+  id: string;
+  title: string;
+  currentStreak: number;
+  createdAt: Date;
+};
+
+type HabitCompletionRecord = { habitId: string };
+type ReminderRecord = { title: string };
+type FocusSessionRecord = { durationMinutes: number };
+type DailyReflectionRecord = { tomorrowCommitment: string | null };
+type DistractionLogRecord = {
+  platform: string;
+  minutesLost: number;
+  replacementAction: string | null;
+};
+type RelationshipRecord = {
+  partnerName: string | null;
+  partner: { name: string | null; email: string } | null;
+  checkIns: { commitment: string | null; appreciation: string | null }[];
+};
+
 @Injectable()
 export class DailyPlanService {
   constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async getToday(user: AuthenticatedUser) {
+    type ActiveGoal = {
+      id: string;
+      title: string;
+      priority: number;
+      createdAt: Date;
+      relationship: {
+        partner: {
+          name: string | null;
+          email: string;
+        } | null;
+      } | null;
+    };
+
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
@@ -101,16 +141,26 @@ export class DailyPlanService {
         },
         take: 3,
       }),
-    ]);
+    ]) as [
+      UserProfileRecord | null,
+      ActiveGoal[],
+      HabitRecord[],
+      HabitCompletionRecord[],
+      ReminderRecord[],
+      FocusSessionRecord[],
+      DailyReflectionRecord | null,
+      DistractionLogRecord[],
+      RelationshipRecord[],
+    ];
 
     const completedHabitIds = new Set(
-      todaysCompletions.map((completion) => completion.habitId),
+      todaysCompletions.map((completion: HabitCompletionRecord) => completion.habitId),
     );
-    const incompleteHabits = habits.filter((habit) => !completedHabitIds.has(habit.id));
+    const incompleteHabits = habits.filter((habit: HabitRecord) => !completedHabitIds.has(habit.id));
     const topDistraction = this.getTopDistraction(recentDistractions);
     const primaryGoal = activeGoals[0] ?? null;
     const focusMinutesDone = todaysFocusSessions.reduce(
-      (total, session) => total + session.durationMinutes,
+      (total: number, session: FocusSessionRecord) => total + session.durationMinutes,
       0,
     );
 
@@ -127,7 +177,8 @@ export class DailyPlanService {
         platform: topDistraction?.platform ?? null,
         minutesLost: topDistraction?.minutesLost ?? 0,
         replacementAction:
-          recentDistractions.find((log) => Boolean(log.replacementAction))?.replacementAction ??
+          recentDistractions.find((log: DistractionLogRecord) => Boolean(log.replacementAction))
+            ?.replacementAction ??
           this.getDefaultReplacementAction(topDistraction?.platform),
       },
       partnerNudge: this.buildPartnerNudge(relationships),
@@ -179,11 +230,11 @@ export class DailyPlanService {
   }
 
   private buildPartnerNudge(
-    relationships: {
+    relationships: Array<{
       partnerName: string | null;
       partner: { name: string | null; email: string } | null;
       checkIns: { commitment: string | null; appreciation: string | null }[];
-    }[],
+    }>,
   ) {
     const relationship = relationships[0];
 

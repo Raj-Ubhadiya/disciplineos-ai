@@ -4,6 +4,12 @@ import type { AuthenticatedUser } from '../auth';
 import { PrismaService } from '../prisma.service';
 import type { CreateDistractionLogDto, UpdateDistractionLogDto } from './dto';
 
+type DistractionLogRecord = {
+  platform: string;
+  minutesLost: number;
+  replacementAction: string | null;
+};
+
 @Injectable()
 export class DistractionsService {
   constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
@@ -43,13 +49,19 @@ export class DistractionsService {
       where: { userId: user.id },
       orderBy: { createdAt: 'desc' },
       take: 30,
-    });
+    }) as DistractionLogRecord[];
 
-    const totalMinutesLost = logs.reduce((total, log) => total + log.minutesLost, 0);
-    const platformTotals = logs.reduce<Record<string, number>>((totals, log) => {
-      totals[log.platform] = (totals[log.platform] ?? 0) + log.minutesLost;
-      return totals;
-    }, {});
+    const totalMinutesLost = logs.reduce(
+      (total: number, log: DistractionLogRecord) => total + log.minutesLost,
+      0,
+    );
+    const platformTotals = logs.reduce(
+      (totals: Record<string, number>, log: DistractionLogRecord) => {
+        totals[log.platform] = (totals[log.platform] ?? 0) + log.minutesLost;
+        return totals;
+      },
+      {} as Record<string, number>,
+    );
     const topPlatform = Object.entries(platformTotals).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 
     return {
@@ -57,7 +69,8 @@ export class DistractionsService {
       totalMinutesLost,
       topPlatform,
       platformTotals,
-      latestReplacementAction: logs.find((log) => log.replacementAction)?.replacementAction ?? null,
+      latestReplacementAction:
+        logs.find((log: DistractionLogRecord) => log.replacementAction)?.replacementAction ?? null,
     };
   }
 

@@ -3,6 +3,7 @@ export class AuthResponseDto {
   user!: {
     id: string;
     email: string;
+    phone: string | null;
     name: string | null;
     role: string;
   };

@@ -29,6 +29,7 @@
     "class-transformer": "latest",
     "class-validator": "latest",
     "helmet": "latest",
+    "nodemailer": "^7.0.5",
     "passport": "latest",
     "passport-jwt": "latest",
     "prisma": "^6.19.0",
@@ -39,6 +40,7 @@
   "devDependencies": {
     "@nestjs/cli": "latest",
     "@types/bcrypt": "latest",
+    "@types/nodemailer": "^7.0.12",
     "@types/passport-jwt": "latest"
   }
 }

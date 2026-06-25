@@ -9,26 +9,52 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      String   @default("member")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String    @id @default(cuid())
+  email           String    @unique
+  phone           String?   @unique
+  password        String?
+  googleId        String?   @unique
+  name            String?
+  role            String    @default("member")
+  authProvider    String    @default("password")
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  profile             UserProfile?
-  goals               Goal[]
-  habits              Habit[]
-  habitCompletions    HabitCompletion[]
-  focusSessions       FocusSession[]
-  distractionLogs     DistractionLog[]
-  aiPlans             AiPlan[]
-  reminders           Reminder[]
-  dailyReflections    DailyReflection[]
-  relationships       Relationship[]        @relation("RelationshipOwner")
-  partnerRelationships Relationship[]       @relation("RelationshipPartner")
-  relationshipCheckIns RelationshipCheckIn[]
+  profile                UserProfile?
+  goals                  Goal[]
+  habits                 Habit[]
+  habitCompletions       HabitCompletion[]
+  focusSessions          FocusSession[]
+  distractionLogs        DistractionLog[]
+  aiPlans                AiPlan[]
+  reminders              Reminder[]
+  dailyReflections       DailyReflection[]
+  relationships          Relationship[]        @relation("RelationshipOwner")
+  partnerRelationships   Relationship[]        @relation("RelationshipPartner")
+  relationshipCheckIns   RelationshipCheckIn[]
+  authOtps               AuthOtp[]
+}
+
+model AuthOtp {
+  id         String    @id @default(cuid())
+  userId     String?
+  channel    String
+  target     String
+  email      String?
+  phone      String?
+  codeHash   String
+  purpose    String
+  name       String?
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([channel, target, purpose, createdAt])
+  @@index([expiresAt])
 }
 
 model UserProfile {
@@ -46,22 +72,22 @@ model UserProfile {
 }
 
 model Goal {
-  id          String    @id @default(cuid())
-  userId      String
+  id             String    @id @default(cuid())
+  userId         String
   relationshipId String?
-  title       String
-  description String?
-  category    String
-  priority    Int       @default(3)
-  whyItMatters String?
-  status      String    @default("active")
-  targetDate  DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  title          String
+  description    String?
+  category       String
+  priority       Int       @default(3)
+  whyItMatters   String?
+  status         String    @default("active")
+  targetDate     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  relationship Relationship? @relation(fields: [relationshipId], references: [id], onDelete: SetNull)
-  habits       Habit[]
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  relationship  Relationship? @relation(fields: [relationshipId], references: [id], onDelete: SetNull)
+  habits        Habit[]
   focusSessions FocusSession[]
 
   @@index([userId])
@@ -79,9 +105,9 @@ model Habit {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  goal        Goal?             @relation(fields: [goalId], references: [id], onDelete: SetNull)
-  completions HabitCompletion[]
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal          Goal?             @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  completions   HabitCompletion[]
   focusSessions FocusSession[]
 
   @@index([userId])
@@ -179,16 +205,16 @@ model Reminder {
 }
 
 model DailyReflection {
-  id                  String   @id @default(cuid())
-  userId              String
-  mood                String
-  wins                String?
-  blockers            String?
-  distractions        String?
-  tomorrowCommitment  String?
-  focusScore          Int      @default(0)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  userId             String
+  mood               String
+  wins               String?
+  blockers           String?
+  distractions       String?
+  tomorrowCommitment String?
+  focusScore         Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -197,16 +223,16 @@ model DailyReflection {
 }
 
 model Relationship {
-  id        String   @id @default(cuid())
-  ownerId   String
-  partnerId String?
+  id          String   @id @default(cuid())
+  ownerId     String
+  partnerId   String?
   partnerName String?
-  status    String   @default("active")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  owner    User  @relation("RelationshipOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  partner  User? @relation("RelationshipPartner", fields: [partnerId], references: [id], onDelete: SetNull)
+  owner   User   @relation("RelationshipOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  partner User?  @relation("RelationshipPartner", fields: [partnerId], references: [id], onDelete: SetNull)
   checkIns RelationshipCheckIn[]
   goals    Goal[]
 

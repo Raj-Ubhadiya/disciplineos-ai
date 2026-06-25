@@ -4,6 +4,12 @@ import type { AuthenticatedUser } from '../auth';
 import { PrismaService } from '../prisma.service';
 import type { CreateDailyReflectionDto } from './dto';
 
+type DailyReflectionRecord = {
+  focusScore: number;
+  mood: string;
+  tomorrowCommitment: string | null;
+};
+
 @Injectable()
 export class ReflectionsService {
   constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
@@ -41,13 +47,15 @@ export class ReflectionsService {
       where: { userId: user.id },
       orderBy: { createdAt: 'desc' },
       take: 14,
-    });
+    }) as DailyReflectionRecord[];
 
     const averageFocusScore =
       reflections.length > 0
         ? Math.round(
-            reflections.reduce((total, reflection) => total + reflection.focusScore, 0) /
-              reflections.length,
+            reflections.reduce(
+              (total: number, reflection: DailyReflectionRecord) => total + reflection.focusScore,
+              0,
+            ) / reflections.length,
           )
         : 0;
 
