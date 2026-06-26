@@ -513,6 +513,10 @@ export class AuthService {
       host: smtpHost,
       port: smtpPort,
       secure: smtpSecure,
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 15_000,
+      requireTLS: !smtpSecure && smtpPort === 587,
       ...(smtpUser && smtpPass
         ? {
             auth: {
