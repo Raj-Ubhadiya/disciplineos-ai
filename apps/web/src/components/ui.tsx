@@ -22,16 +22,16 @@ export function Button({
   return (
     <button
       className={cx(
-        'inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-semibold leading-none whitespace-nowrap transition duration-200',
+        'inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-semibold leading-none whitespace-nowrap transition duration-200',
         'disabled:cursor-not-allowed disabled:opacity-55',
         variant === 'primary' &&
-          'bg-[linear-gradient(135deg,var(--color-brand)_0%,var(--color-brand-secondary)_100%)] text-white shadow-[0_18px_45px_rgba(79,70,229,0.24)] hover:-translate-y-0.5 hover:shadow-[0_26px_55px_rgba(79,70,229,0.3)]',
+          'bg-slate-950 text-white shadow-sm hover:bg-slate-800',
         variant === 'secondary' &&
-          'border border-[var(--color-border)] bg-white/92 text-slate-900 shadow-[0_12px_30px_rgba(23,32,51,0.05)] hover:border-[var(--color-border-strong)] hover:bg-white',
+          'border border-[var(--color-border)] bg-white text-slate-900 shadow-sm hover:border-[var(--color-border-strong)] hover:bg-slate-50',
         variant === 'ghost' &&
           'bg-transparent text-slate-700 hover:bg-white/85 hover:text-slate-950',
         variant === 'danger' &&
-          'bg-[linear-gradient(135deg,#fb7185_0%,#e11d48_100%)] text-white shadow-[0_18px_40px_rgba(225,29,72,0.2)] hover:-translate-y-0.5',
+          'bg-rose-600 text-white shadow-sm hover:bg-rose-700',
         className,
       )}
       {...props}
@@ -54,11 +54,11 @@ export function ButtonLink({
     <Link
       href={href}
       className={cx(
-        'inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-semibold leading-none whitespace-nowrap transition duration-200',
+        'inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-semibold leading-none whitespace-nowrap transition duration-200',
         variant === 'primary' &&
-          'bg-[linear-gradient(135deg,var(--color-brand)_0%,var(--color-brand-secondary)_100%)] text-white shadow-[0_18px_45px_rgba(79,70,229,0.24)] hover:-translate-y-0.5 hover:shadow-[0_26px_55px_rgba(79,70,229,0.3)]',
+          'bg-slate-950 text-white shadow-sm hover:bg-slate-800',
         variant === 'secondary' &&
-          'border border-[var(--color-border)] bg-white/92 text-slate-900 shadow-[0_12px_30px_rgba(23,32,51,0.05)] hover:border-[var(--color-border-strong)] hover:bg-white',
+          'border border-[var(--color-border)] bg-white text-slate-900 shadow-sm hover:border-[var(--color-border-strong)] hover:bg-slate-50',
         variant === 'ghost' &&
           'bg-transparent text-slate-700 hover:bg-white/85 hover:text-slate-950',
         className,
@@ -77,7 +77,7 @@ export function Card({
   return (
     <div
       className={cx(
-        'rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-soft)] backdrop-blur-sm',
+        'rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm',
         className,
       )}
       {...props}
@@ -113,7 +113,7 @@ export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElem
   return (
     <input
       className={cx(
-        'min-h-[3.25rem] w-full rounded-[22px] border border-[var(--color-border)] bg-white/96 px-4 text-sm text-[var(--color-text)] outline-none transition placeholder:text-slate-400',
+        'min-h-11 w-full rounded-lg border border-[var(--color-border)] bg-white px-3 text-sm text-[var(--color-text)] outline-none transition placeholder:text-slate-400',
         'focus:border-[var(--color-brand)] focus:ring-4 focus:ring-indigo-100',
         className,
       )}
@@ -130,7 +130,7 @@ export function Select({
   return (
     <select
       className={cx(
-        'min-h-[3.25rem] w-full rounded-[22px] border border-[var(--color-border)] bg-white/96 px-4 text-sm text-[var(--color-text)] outline-none transition',
+        'min-h-11 w-full rounded-lg border border-[var(--color-border)] bg-white px-3 text-sm text-[var(--color-text)] outline-none transition',
         'focus:border-[var(--color-brand)] focus:ring-4 focus:ring-indigo-100',
         className,
       )}
@@ -145,7 +145,7 @@ export function Textarea({ className, ...props }: TextareaHTMLAttributes<HTMLTex
   return (
     <textarea
       className={cx(
-        'min-h-28 w-full rounded-[22px] border border-[var(--color-border)] bg-white/96 px-4 py-3 text-sm text-[var(--color-text)] outline-none transition placeholder:text-slate-400',
+        'min-h-28 w-full rounded-lg border border-[var(--color-border)] bg-white px-3 py-3 text-sm text-[var(--color-text)] outline-none transition placeholder:text-slate-400',
         'focus:border-[var(--color-brand)] focus:ring-4 focus:ring-indigo-100',
         className,
       )}
@@ -194,7 +194,7 @@ export function Toast({
   return (
     <div
       className={cx(
-        'pointer-events-auto rounded-[24px] border px-4 py-3 shadow-[0_24px_70px_rgba(15,23,42,0.18)] backdrop-blur-xl',
+        'pointer-events-auto rounded-lg border px-4 py-3 shadow-lg backdrop-blur-xl',
         tone === 'neutral' && 'border-indigo-200/80 bg-white/95 text-slate-700',
         tone === 'success' && 'border-emerald-200 bg-emerald-50/95 text-emerald-800',
         tone === 'error' && 'border-rose-200 bg-rose-50/95 text-rose-800',

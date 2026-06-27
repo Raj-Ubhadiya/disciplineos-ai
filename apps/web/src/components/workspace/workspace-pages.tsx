@@ -60,9 +60,9 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+      className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
         active
-          ? 'bg-indigo-100 text-indigo-700 shadow-[inset_0_0_0_1px_rgba(99,102,241,0.08)]'
+          ? 'bg-slate-950 text-white'
           : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
       }`}
     >
@@ -79,7 +79,7 @@ function DetailRow({
   value: string;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-[22px] border border-white/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(246,249,255,0.92)_100%)] px-4 py-3 shadow-[0_16px_34px_rgba(15,23,42,0.05)]">
+    <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3">
       <span className="text-sm text-slate-600">{label}</span>
       <span className="text-sm font-semibold text-slate-950">{value}</span>
     </div>
@@ -110,123 +110,28 @@ export function DashboardPage() {
     dailyPlan?.nextHabits[0]?.title ?? dailyPlan?.primaryGoal?.title ?? 'Pick one clear target for today';
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-5">
       <PageHeader
         eyebrow="Dashboard"
-        title={`Welcome back${user?.name ? `, ${user.name}` : ''}`}
-        description="See today's priority, protect one focus block, and keep momentum steady."
+        title={`Today${user?.name ? ` for ${user.name.split(' ')[0]}` : ''}`}
+        description="A compact view of your next action, focus progress, and daily discipline signals."
         action={
           <div className="flex flex-wrap gap-3">
             <Link
               href="/app/today"
-              className="rounded-2xl bg-[linear-gradient(135deg,var(--color-brand)_0%,var(--color-brand-secondary)_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_45px_rgba(79,70,229,0.22)]"
+              className="inline-flex min-h-11 items-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white"
             >
-              Open today plan
+              Today plan
             </Link>
             <Link
               href="/app/focus-sessions"
-              className="rounded-2xl border border-white/80 bg-white/80 px-5 py-3 text-sm font-semibold text-[var(--color-text)] shadow-[0_14px_32px_rgba(15,23,42,0.06)] backdrop-blur"
+              className="inline-flex min-h-11 items-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700"
             >
-              Start focus session
+              Start focus
             </Link>
           </div>
         }
       />
-
-      <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-        <Card className="relative overflow-hidden border-indigo-300/35 bg-[linear-gradient(135deg,#101a44_0%,#2e3ec8_52%,#5f6dff_100%)] text-white shadow-[0_30px_90px_rgba(67,56,202,0.26)]">
-          <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.95)_50%,transparent_100%)]" />
-          <div className="absolute -right-10 top-0 h-40 w-40 rounded-full bg-white/14 blur-3xl" />
-          <div className="absolute bottom-0 left-10 h-36 w-36 rounded-full bg-cyan-300/16 blur-3xl" />
-          <div className="absolute right-10 top-16 h-24 w-24 rounded-full border border-white/12 bg-white/6 blur-2xl" />
-          <div className="relative grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-            <div>
-              <div className="inline-flex items-center rounded-full border border-white/14 bg-white/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-indigo-100 backdrop-blur">
-                Today&apos;s priority
-              </div>
-              <h2 className="mt-3 text-3xl font-black tracking-[-0.04em]">
-                {dailyPlan?.headline ?? 'Choose one meaningful win before the day gets noisy.'}
-              </h2>
-              <p className="mt-4 max-w-xl text-sm leading-7 text-indigo-100">
-                {dailyPlan?.primaryGoal?.whyItMatters ??
-                  'Make the next action obvious, small enough to finish, and linked to something that matters.'}
-              </p>
-
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[24px] border border-white/12 bg-white/10 p-4 backdrop-blur-sm">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-indigo-100">Focus score</p>
-                  <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-white">{focusScore}</p>
-                </div>
-                <div className="rounded-[24px] border border-white/12 bg-white/10 p-4 backdrop-blur-sm">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-indigo-100">Current streak</p>
-                  <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-white">{streak}</p>
-                </div>
-                <div className="rounded-[24px] border border-white/12 bg-white/10 p-4 backdrop-blur-sm">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-indigo-100">Focus minutes</p>
-                  <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-white">{focusMinutes}</p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  href="/app/focus-sessions"
-                  className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-indigo-700 shadow-[0_16px_36px_rgba(255,255,255,0.18)]"
-                >
-                  Start focus
-                </Link>
-                <Link
-                  href="/app/habits"
-                  className="rounded-2xl border border-white/18 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur"
-                >
-                  Review habits
-                </Link>
-              </div>
-            </div>
-
-            <div className="grid gap-3">
-              {[
-                ['Start here', morningAction],
-                ['Focus block', `${dailyPlan?.focusMinutesDone ?? 0}/${dailyPlan?.focusMinutes ?? 25} minutes protected`],
-                [
-                  'Close the day',
-                  dailyPlan?.latestReflection?.tomorrowCommitment ??
-                    'Write one sentence about what would make today feel complete.',
-                ],
-              ].map(([label, value], index) => (
-                <div
-                  key={label}
-                  className="rounded-[24px] border border-white/12 bg-white/10 p-4 backdrop-blur-sm"
-                >
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-indigo-100">
-                    Step {index + 1}
-                  </p>
-                  <p className="mt-2 text-base font-semibold text-white">{label}</p>
-                  <p className="mt-2 text-sm leading-6 text-indigo-100">{value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Card>
-
-        <Card className="border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f7f9ff_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-          <SectionTitle
-            title="Momentum snapshot"
-            copy="The essentials for today."
-          />
-          <div className="grid gap-3">
-            <DetailRow
-              label="Active goals"
-              value={formatGoalCount(analyticsSummary?.activeGoals ?? goals.length)}
-            />
-            <DetailRow
-              label="Focus minutes"
-              value={`${focusSessionSummary?.totalMinutes ?? 0} minutes logged`}
-            />
-            <DetailRow label="Reflections" value={`${reflections.length} entries saved`} />
-            <DetailRow label="Habits" value={`${habits.length} active habits`} />
-          </div>
-        </Card>
-      </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard
@@ -253,84 +158,122 @@ export function DashboardPage() {
         />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-        <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
+      <div className="grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
+        <Card className="rounded-xl border-slate-200 bg-white p-5 shadow-sm">
           <SectionTitle
-            title="Quick actions"
-            copy="Jump into the next action."
+            title="Next action"
+            copy="Keep the next move specific enough to start."
+            action={
+              <Link href="/app/today" className="text-sm font-semibold text-indigo-700">
+                Edit plan
+              </Link>
+            }
           />
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <p className="text-xl font-semibold text-slate-950">{topAction}</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {dailyPlan?.primaryGoal?.whyItMatters ?? morningAction}
+            </p>
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {[
+              ['Start', morningAction],
+              ['Focus', `${dailyPlan?.focusMinutesDone ?? 0}/${dailyPlan?.focusMinutes ?? 25} minutes`],
+              [
+                'Reflect',
+                dailyPlan?.latestReflection?.tomorrowCommitment ?? 'Write a short review tonight',
+              ],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-lg border border-slate-200 bg-white p-4">
+                <p className="text-xs font-semibold text-slate-500">{label}</p>
+                <p className="mt-2 text-sm font-medium leading-6 text-slate-900">{value}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href="/app/focus-sessions"
+              className="inline-flex min-h-11 items-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white"
+            >
+              Start focus session
+            </Link>
+            <Link
+              href="/app/habits"
+              className="inline-flex min-h-11 items-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700"
+            >
+              Complete habit
+            </Link>
+          </div>
+        </Card>
+
+        <Card className="rounded-xl border-slate-200 bg-white p-5 shadow-sm">
+          <SectionTitle title="Momentum" copy="Useful signals, not noise." />
+          <div className="grid gap-3">
+            <DetailRow
+              label="Active goals"
+              value={formatGoalCount(analyticsSummary?.activeGoals ?? goals.length)}
+            />
+            <DetailRow label="Habits" value={`${habits.length} active`} />
+            <DetailRow label="Reflections" value={`${reflections.length} saved`} />
+            <DetailRow
+              label="Reflection average"
+              value={`${analyticsSummary?.averageReflectionScore ?? 0}`}
+            />
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+        <Card className="rounded-xl border-slate-200 bg-white p-5 shadow-sm">
+          <SectionTitle title="Quick actions" copy="Common actions should be one click away." />
+          <div className="grid gap-2">
             {([
-              ['Complete habit', '/app/habits'],
               ['Open today plan', '/app/today'],
+              ['Complete habit', '/app/habits'],
               ['Write reflection', '/app/reflections'],
-              ['Adjust profile', '/app/profile'],
+              ['Update profile', '/app/profile'],
             ] as const).map(([label, href]) => (
               <Link
                 key={href}
                 href={href}
-                className="group rounded-[28px] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f4f8ff_100%)] p-5 text-sm font-semibold text-[var(--color-text)] shadow-[0_14px_36px_rgba(15,23,42,0.05)] transition hover:-translate-y-1 hover:shadow-[0_20px_44px_rgba(23,32,51,0.1)]"
+                className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-300 hover:bg-slate-50"
               >
-                <span className="block text-base text-slate-950">{label}</span>
-                <span className="mt-2 block text-xs font-medium uppercase tracking-[0.18em] text-slate-400 transition group-hover:text-indigo-600">
-                  Open page
-                </span>
+                <span>{label}</span>
+                <span className="text-slate-400">Open</span>
               </Link>
             ))}
           </div>
         </Card>
 
-        <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-          <SectionTitle
-            title="Today&apos;s target"
-            copy="Keep one outcome visible."
-          />
-          <div className="rounded-[28px] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f7f9ff_100%)] p-5 shadow-[0_14px_34px_rgba(15,23,42,0.05)]">
-            <p className="text-lg font-semibold text-[var(--color-text)]">{topAction}</p>
-            <p className="mt-3 text-sm leading-7 text-[var(--color-text-soft)]">
-              {dailyPlan?.primaryGoal?.whyItMatters ??
-                'Choose one clear goal so the day feels directed instead of scattered.'}
-            </p>
-            <div className="mt-5 grid gap-3">
-              <DetailRow
-                label="Active goals"
-                value={formatGoalCount(analyticsSummary?.activeGoals ?? goals.length)}
-              />
-              <DetailRow
-                label="Reflection average"
-                value={`${analyticsSummary?.averageReflectionScore ?? 0}`}
-              />
+        <Card className="rounded-xl border-slate-200 bg-white p-5 shadow-sm">
+          <SectionTitle title="Recent activity" copy="The latest saved progress." />
+          {recentActivity.length ? (
+            <div className="grid gap-3">
+              {recentActivity.map((item) => (
+                <div
+                  key={`${item.title}-${item.timestamp}`}
+                  className="rounded-lg border border-slate-200 bg-white p-4"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold text-slate-950">{item.title}</p>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">{item.detail}</p>
+                    </div>
+                    <p className="text-xs text-slate-400">{formatDateTime(item.timestamp)}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <EmptyState
+              title="No recent activity yet"
+              copy="Start one habit or one focus session to begin."
+              ctaHref="/app/today"
+              ctaLabel="Open today plan"
+            />
+          )}
         </Card>
       </div>
-
-      <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-        <SectionTitle title="Recent activity" copy="Your latest updates." />
-        {recentActivity.length ? (
-          <div className="grid gap-3 md:grid-cols-3">
-            {recentActivity.map((item) => (
-              <div
-                key={`${item.title}-${item.timestamp}`}
-                className="rounded-[28px] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f7f9ff_100%)] p-4 shadow-[0_14px_34px_rgba(15,23,42,0.05)]"
-              >
-                <p className="font-semibold text-[var(--color-text)]">{item.title}</p>
-                <p className="mt-2 text-sm text-[var(--color-text-soft)]">{item.detail}</p>
-                <p className="mt-3 text-xs uppercase tracking-[0.18em] text-slate-400">
-                  {formatDateTime(item.timestamp)}
-                </p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <EmptyState
-            title="No recent activity yet"
-            copy="Start one habit or one focus session to begin."
-            ctaHref="/app/today"
-            ctaLabel="Open today plan"
-          />
-        )}
-      </Card>
     </div>
   );
 }
