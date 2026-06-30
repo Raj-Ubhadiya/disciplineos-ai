@@ -497,83 +497,222 @@ export function TodayPlanPage() {
 
 export function AiPlannerPage() {
   const { aiPlans, activateAiPlan, createAiPlan, isPending } = useWorkspace();
+  const [mode, setMode] = useState<'discover' | 'direct'>('discover');
   const [form, setForm] = useState({
     dream: '',
     currentSituation: '',
     mainObstacle: 'social media distraction',
     roleModel: '',
   });
+  const [discovery, setDiscovery] = useState({
+    interests: '',
+    strengths: '',
+    problems: '',
+    lifestyle: '',
+    shortTermWindow: 'next 30 days',
+    longTermWindow: 'next 3 years',
+    constraints: '',
+    distractions: 'social media and unclear direction',
+  });
 
   const latestPlan = aiPlans[0];
+  const canGenerateDiscovery =
+    discovery.interests.trim().length > 2 &&
+    discovery.strengths.trim().length > 2 &&
+    discovery.problems.trim().length > 2;
+
+  function generateGoalDiscoveryPlan() {
+    const dream = [
+      'Help me discover my life direction and create discipline goals.',
+      `Interests: ${discovery.interests || 'not sure yet'}.`,
+      `Strengths: ${discovery.strengths || 'still exploring'}.`,
+      `Problems I care about: ${discovery.problems || 'not sure yet'}.`,
+      `Preferred lifestyle: ${discovery.lifestyle || 'balanced and meaningful'}.`,
+      `Create both short-term goals for ${discovery.shortTermWindow} and long-term goals for ${discovery.longTermWindow}.`,
+    ].join(' ');
+
+    createAiPlan({
+      dream,
+      currentSituation: [
+        'The user is still discovering their goal.',
+        discovery.constraints ? `Current limits: ${discovery.constraints}.` : '',
+        'Avoid overwhelming them. Recommend simple, realistic first steps.',
+      ]
+        .filter(Boolean)
+        .join(' '),
+      mainObstacle: discovery.distractions,
+      roleModel: 'a calm, consistent person who builds direction through experiments',
+    });
+  }
 
   return (
     <div className="grid gap-6">
       <PageHeader
         eyebrow="AI planner"
-        title="Generate a discipline plan"
-        description="Turn your goal and obstacle into a practical plan."
+        title="Find or build your next goal"
+        description="Use goal discovery if you are unsure, or generate a discipline plan if you already know what you want."
       />
 
+      <div className="flex flex-wrap gap-2">
+        <FilterChip
+          label="Help me find my goal"
+          active={mode === 'discover'}
+          onClick={() => setMode('discover')}
+        />
+        <FilterChip
+          label="I already know my goal"
+          active={mode === 'direct'}
+          onClick={() => setMode('direct')}
+        />
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
-        <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(246,249,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-          <SectionTitle
-            title="Plan input"
-            copy="Describe what you want help building."
-          />
-          <div className="mb-5 flex flex-wrap gap-2">
-            {['Ship my portfolio', 'Study without phone relapse', 'Build deep work consistency'].map(
-              (prompt) => (
-                <button
-                  key={prompt}
-                  type="button"
-                  onClick={() => setForm({ ...form, dream: prompt })}
-                  className="rounded-full border border-indigo-100/80 bg-indigo-50/90 px-4 py-2 text-sm font-medium text-indigo-700 transition hover:-translate-y-0.5 hover:bg-indigo-100"
-                >
-                  {prompt}
-                </button>
-              ),
-            )}
-          </div>
-          <div className="grid gap-4">
-            <Field label="Dream">
-              <Textarea
-                value={form.dream}
-                onChange={(event) => setForm({ ...form, dream: event.target.value })}
-                placeholder="Describe the disciplined life or outcome you want."
-              />
-            </Field>
-            <Field label="Current situation">
-              <Input
-                value={form.currentSituation}
-                onChange={(event) => setForm({ ...form, currentSituation: event.target.value })}
-                placeholder="What is true today?"
-              />
-            </Field>
-            <Field label="Main obstacle">
-              <Input
-                value={form.mainObstacle}
-                onChange={(event) => setForm({ ...form, mainObstacle: event.target.value })}
-                placeholder="What keeps breaking momentum?"
-              />
-            </Field>
-            <Field label="Role model">
-              <Input
-                value={form.roleModel}
-                onChange={(event) => setForm({ ...form, roleModel: event.target.value })}
-                placeholder="Optional: who inspires your discipline?"
-              />
-            </Field>
-            <Button type="button" disabled={isPending || form.dream.length < 5} onClick={() => createAiPlan(form)}>
-              {isPending ? 'Generating...' : 'Generate plan'}
-            </Button>
-          </div>
-        </Card>
+        {mode === 'discover' ? (
+          <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(246,249,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
+            <SectionTitle
+              title="AI goal discovery"
+              copy="Answer a few simple questions. The planner will turn your interests into short-term and long-term goals."
+            />
+            <div className="mb-5 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4">
+              <p className="font-semibold text-[var(--app-text)]">Good goals come from patterns.</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--app-text-muted)]">
+                We look at what you enjoy, what you are good at, what problems you care about,
+                and what kind of life you want. Then we create practical direction.
+              </p>
+            </div>
+            <div className="grid gap-4">
+              <Field label="What topics or activities naturally interest you?">
+                <Textarea
+                  value={discovery.interests}
+                  onChange={(event) => setDiscovery({ ...discovery, interests: event.target.value })}
+                  placeholder="Example: technology, fitness, business, design, teaching, helping people..."
+                />
+              </Field>
+              <Field label="What are you already good at, even a little?">
+                <Textarea
+                  value={discovery.strengths}
+                  onChange={(event) => setDiscovery({ ...discovery, strengths: event.target.value })}
+                  placeholder="Example: learning fast, talking to people, coding, writing, discipline, creativity..."
+                />
+              </Field>
+              <Field label="What problems do you care about solving?">
+                <Textarea
+                  value={discovery.problems}
+                  onChange={(event) => setDiscovery({ ...discovery, problems: event.target.value })}
+                  placeholder="Example: financial freedom, career growth, health, family responsibility, confidence..."
+                />
+              </Field>
+              <Field label="What kind of life do you want to build?">
+                <Textarea
+                  value={discovery.lifestyle}
+                  onChange={(event) => setDiscovery({ ...discovery, lifestyle: event.target.value })}
+                  placeholder="Example: independent, healthy, respected, calm, creative, financially stable..."
+                />
+              </Field>
+              <div className="grid gap-4 md:grid-cols-2">
+                <Field label="Short-term goal window">
+                  <Input
+                    value={discovery.shortTermWindow}
+                    onChange={(event) =>
+                      setDiscovery({ ...discovery, shortTermWindow: event.target.value })
+                    }
+                    placeholder="next 30 days"
+                  />
+                </Field>
+                <Field label="Long-term goal window">
+                  <Input
+                    value={discovery.longTermWindow}
+                    onChange={(event) =>
+                      setDiscovery({ ...discovery, longTermWindow: event.target.value })
+                    }
+                    placeholder="next 3 years"
+                  />
+                </Field>
+              </div>
+              <Field label="What limits or distractions should the plan respect?">
+                <Input
+                  value={discovery.distractions}
+                  onChange={(event) => setDiscovery({ ...discovery, distractions: event.target.value })}
+                  placeholder="social media, low confidence, no clear routine..."
+                />
+              </Field>
+              <Field label="Any real-life constraints?">
+                <Input
+                  value={discovery.constraints}
+                  onChange={(event) => setDiscovery({ ...discovery, constraints: event.target.value })}
+                  placeholder="college, job, family, time, money, health..."
+                />
+              </Field>
+              <Button
+                type="button"
+                disabled={isPending || !canGenerateDiscovery}
+                onClick={generateGoalDiscoveryPlan}
+              >
+                {isPending ? 'Finding direction...' : 'Find my goals'}
+              </Button>
+            </div>
+          </Card>
+        ) : (
+          <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(246,249,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
+            <SectionTitle
+              title="Plan input"
+              copy="Describe what you want help building."
+            />
+            <div className="mb-5 flex flex-wrap gap-2">
+              {['Ship my portfolio', 'Study without phone relapse', 'Build deep work consistency'].map(
+                (prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    onClick={() => setForm({ ...form, dream: prompt })}
+                    className="rounded-full border border-indigo-100/80 bg-indigo-50/90 px-4 py-2 text-sm font-medium text-indigo-700 transition hover:-translate-y-0.5 hover:bg-indigo-100"
+                  >
+                    {prompt}
+                  </button>
+                ),
+              )}
+            </div>
+            <div className="grid gap-4">
+              <Field label="Dream">
+                <Textarea
+                  value={form.dream}
+                  onChange={(event) => setForm({ ...form, dream: event.target.value })}
+                  placeholder="Describe the disciplined life or outcome you want."
+                />
+              </Field>
+              <Field label="Current situation">
+                <Input
+                  value={form.currentSituation}
+                  onChange={(event) => setForm({ ...form, currentSituation: event.target.value })}
+                  placeholder="What is true today?"
+                />
+              </Field>
+              <Field label="Main obstacle">
+                <Input
+                  value={form.mainObstacle}
+                  onChange={(event) => setForm({ ...form, mainObstacle: event.target.value })}
+                  placeholder="What keeps breaking momentum?"
+                />
+              </Field>
+              <Field label="Role model">
+                <Input
+                  value={form.roleModel}
+                  onChange={(event) => setForm({ ...form, roleModel: event.target.value })}
+                  placeholder="Optional: who inspires your discipline?"
+                />
+              </Field>
+              <Button type="button" disabled={isPending || form.dream.length < 5} onClick={() => createAiPlan(form)}>
+                {isPending ? 'Generating...' : 'Generate plan'}
+              </Button>
+            </div>
+          </Card>
+        )}
 
         {latestPlan ? (
           <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(244,248,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
             <SectionTitle
             title={latestPlan.dream}
-              copy="Review the plan, then activate it."
+              copy="Review the suggested short-term and long-term direction, then activate the plan when it feels useful."
               action={
                 <Button type="button" onClick={() => activateAiPlan(latestPlan.id)} disabled={isPending}>
                   Activate plan
@@ -610,8 +749,8 @@ export function AiPlannerPage() {
           </Card>
         ) : (
           <EmptyState
-            title="No AI plan generated yet"
-            copy="Describe your goal to generate your first plan."
+            title="No direction generated yet"
+            copy="Use goal discovery if you are unsure, or describe a clear goal if you already know it."
           />
         )}
       </div>
@@ -648,6 +787,14 @@ export function GoalsPage() {
         eyebrow="Goals"
         title="Goals that guide the week"
         description="Keep goals clear, practical, and easy to review."
+        action={
+          <Link
+            href="/app/ai-planner"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--app-primary)] px-5 text-sm font-semibold text-[var(--app-primary-text)] transition hover:bg-[var(--app-primary-hover)]"
+          >
+            Help me find a goal
+          </Link>
+        }
       />
 
       <div className="grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
@@ -736,7 +883,9 @@ export function GoalsPage() {
           ) : (
             <EmptyState
               title="No goals yet"
-              copy="Create your first goal so your daily work has a clear direction."
+              copy="Create your first goal, or use AI Goal Discovery if you are not sure what direction to choose."
+              ctaHref="/app/ai-planner"
+              ctaLabel="Find my goal"
             />
           )}
         </div>
