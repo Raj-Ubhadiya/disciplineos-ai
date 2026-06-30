@@ -280,11 +280,16 @@ export function DashboardPage() {
 
 export function TodayPlanPage() {
   const { dailyPlan, reminders, completeReminder } = useWorkspace();
+  const hasPriorityGoal = Boolean(dailyPlan?.primaryGoal);
+  const hasHabit = Boolean(dailyPlan?.nextHabits.length);
+  const isNewUser = !hasPriorityGoal && !hasHabit;
 
   const progress =
     dailyPlan && dailyPlan.focusMinutes > 0
       ? (dailyPlan.focusMinutesDone / dailyPlan.focusMinutes) * 100
-      : 20;
+      : isNewUser
+        ? 0
+        : 20;
 
   const steps = [
     {
@@ -320,16 +325,74 @@ export function TodayPlanPage() {
     <div className="grid gap-6">
       <PageHeader
         eyebrow="Today plan"
-        title="Your plan for today"
-        description="Move through the day in a simple order: start, focus, finish, reflect."
+        title={isNewUser ? 'Start with one clear action' : 'Your plan for today'}
+        description={
+          isNewUser
+            ? 'DisciplineOS works best when you choose one goal, one small habit, and one focus block for today.'
+            : 'Move through the day in a simple order: start, focus, finish, reflect.'
+        }
       />
+
+      {isNewUser ? (
+        <Card className="border-[var(--app-border)] bg-[var(--app-surface)] shadow-[var(--app-shadow)]">
+          <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+            <div>
+              <p className="text-sm font-semibold text-[var(--app-primary)]">First time here</p>
+              <h2 className="mt-2 text-2xl font-bold text-[var(--app-text)]">
+                Build today in three small steps.
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-[var(--app-text-muted)]">
+                You do not need to fill everything. Pick one meaningful goal, connect one habit,
+                then protect one focus session. That is enough to start.
+              </p>
+            </div>
+            <div className="grid gap-3 md:grid-cols-3">
+              {[
+                {
+                  step: '1',
+                  title: 'Create goal',
+                  copy: 'Choose what matters today.',
+                  href: '/app/goals',
+                },
+                {
+                  step: '2',
+                  title: 'Add habit',
+                  copy: 'Make it small and repeatable.',
+                  href: '/app/habits',
+                },
+                {
+                  step: '3',
+                  title: 'Start focus',
+                  copy: 'Protect 25 minutes.',
+                  href: '/app/focus-sessions',
+                },
+              ].map((startStep) => (
+                <Link
+                  key={startStep.title}
+                  href={startStep.href}
+                  className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4 transition hover:-translate-y-0.5 hover:border-[var(--app-border-strong)]"
+                >
+                  <span className="flex size-9 items-center justify-center rounded-md bg-[var(--app-primary)] text-sm font-bold text-[var(--app-primary-text)]">
+                    {startStep.step}
+                  </span>
+                  <p className="mt-4 font-semibold text-[var(--app-text)]">{startStep.title}</p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--app-text-muted)]">{startStep.copy}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Card>
+      ) : null}
 
       <Card className="relative overflow-hidden border-indigo-300/35 bg-[linear-gradient(135deg,#171f58_0%,#4f46e5_58%,#22c55e_150%)] text-white shadow-[0_30px_90px_rgba(79,70,229,0.24)]">
         <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.92)_50%,transparent_100%)]" />
         <div className="absolute -right-10 top-0 h-36 w-36 rounded-full bg-white/14 blur-3xl" />
         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-indigo-100">Today&apos;s headline</p>
         <h2 className="mt-3 text-3xl font-black">
-          {dailyPlan?.headline ?? "Generate today's plan after logging in and creating your first goals."}
+          {dailyPlan?.headline ??
+            (isNewUser
+              ? 'Choose one goal, one habit, and one focus block to begin.'
+              : "Generate today's plan after creating your first goals.")}
         </h2>
         <div className="mt-6 max-w-xl">
           <ProgressBar value={progress} />
@@ -339,16 +402,16 @@ export function TodayPlanPage() {
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
-            href="/app/focus-sessions"
+            href={isNewUser ? '/app/goals' : '/app/focus-sessions'}
             className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-indigo-700 shadow-[0_16px_36px_rgba(255,255,255,0.18)]"
           >
-            Start focus session
+            {isNewUser ? 'Create first goal' : 'Start focus session'}
           </Link>
           <Link
-            href="/app/reflections"
+            href={isNewUser ? '/app/habits' : '/app/reflections'}
             className="rounded-2xl border border-white/18 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur"
           >
-            Write reflection
+            {isNewUser ? 'Add first habit' : 'Write reflection'}
           </Link>
         </div>
       </Card>
@@ -362,7 +425,16 @@ export function TodayPlanPage() {
 
         <div className="grid gap-4">
           <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-            <SectionTitle title="Today's priority goal" />
+            <SectionTitle
+              title="Today's priority goal"
+              action={
+                !hasPriorityGoal ? (
+                  <Link href="/app/goals" className="text-sm font-semibold text-[var(--app-primary)]">
+                    Create goal
+                  </Link>
+                ) : null
+              }
+            />
             <p className="text-lg font-semibold text-[var(--color-text)]">
               {dailyPlan?.primaryGoal?.title ?? 'No priority goal selected yet'}
             </p>
@@ -390,7 +462,8 @@ export function TodayPlanPage() {
           <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
             <SectionTitle title="Reminder list" />
             <div className="grid gap-3">
-              {(dailyPlan?.dueReminders ?? reminders.slice(0, 3)).map((reminder) => (
+              {(dailyPlan?.dueReminders ?? reminders.slice(0, 3)).length ? (
+                (dailyPlan?.dueReminders ?? reminders.slice(0, 3)).map((reminder) => (
                 <div
                   key={reminder.id}
                   className="flex flex-wrap items-center justify-between gap-3 rounded-[28px] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f4f8ff_100%)] p-4 shadow-[0_14px_36px_rgba(15,23,42,0.05)]"
@@ -405,7 +478,15 @@ export function TodayPlanPage() {
                     Complete
                   </Button>
                 </div>
-              ))}
+                ))
+              ) : (
+                <div className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4">
+                  <p className="font-semibold text-[var(--app-text)]">No reminders yet</p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--app-text-muted)]">
+                    Start with a goal and habit first. Reminders can come after the basic routine is clear.
+                  </p>
+                </div>
+              )}
             </div>
           </Card>
         </div>
