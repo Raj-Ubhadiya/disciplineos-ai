@@ -31,6 +31,55 @@
   --color-danger-soft: #ffe4ec;
   --shadow-soft: 0 20px 60px rgba(31, 46, 85, 0.08);
   --shadow-strong: 0 28px 90px rgba(31, 46, 85, 0.14);
+  --app-bg: #f6f8fb;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f8fafc;
+  --app-surface-raised: #ffffff;
+  --app-border: #dbe3ef;
+  --app-border-strong: #c6d1e1;
+  --app-text: #071124;
+  --app-text-muted: #53627a;
+  --app-text-faint: #7b8aa3;
+  --app-primary: #4f46e5;
+  --app-primary-hover: #4338ca;
+  --app-primary-soft: #eef2ff;
+  --app-primary-text: #ffffff;
+  --app-success: #059669;
+  --app-success-soft: #d1fae5;
+  --app-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+:root[data-theme='dark'] {
+  --background: #090d18;
+  --foreground: #eef4ff;
+  --muted: #96a3b8;
+  --panel: rgba(16, 24, 42, 0.92);
+  --color-background: #090d18;
+  --color-surface: rgba(16, 24, 42, 0.92);
+  --color-surface-strong: #111827;
+  --color-surface-alt: #151f35;
+  --color-border: rgba(120, 138, 168, 0.28);
+  --color-border-strong: rgba(148, 163, 184, 0.42);
+  --color-text: #eef4ff;
+  --color-text-soft: #a8b3c7;
+  --color-text-faint: #77849a;
+  --color-brand-soft: #232b64;
+  --app-bg: #090d18;
+  --app-surface: #101827;
+  --app-surface-muted: #131d30;
+  --app-surface-raised: #162136;
+  --app-border: #253149;
+  --app-border-strong: #34425c;
+  --app-text: #eef4ff;
+  --app-text-muted: #a8b3c7;
+  --app-text-faint: #77849a;
+  --app-primary: #7c8cff;
+  --app-primary-hover: #93a2ff;
+  --app-primary-soft: #1d2552;
+  --app-primary-text: #ffffff;
+  --app-success: #34d399;
+  --app-success-soft: #123f32;
+  --app-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 18px 44px rgba(0, 0, 0, 0.22);
 }
 
 @theme inline {
@@ -55,9 +104,76 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  background: #f6f8fb;
-  color: var(--foreground);
+  background: var(--app-bg);
+  color: var(--app-text);
   font-family: var(--font-sans), sans-serif;
+}
+
+.workspace-app {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] .workspace-app {
+  color-scheme: dark;
+}
+
+:root[data-theme='dark'] .workspace-app :is(.bg-white, .bg-slate-50, .bg-slate-100) {
+  background-color: var(--app-surface) !important;
+}
+
+:root[data-theme='dark'] .workspace-app [class*='#ffffff'],
+:root[data-theme='dark'] .workspace-app [class*='#fffdf5'],
+:root[data-theme='dark'] .workspace-app [class*='#f5f8ff'],
+:root[data-theme='dark'] .workspace-app [class*='#f4f8ff'],
+:root[data-theme='dark'] .workspace-app [class*='#f7faff'],
+:root[data-theme='dark'] .workspace-app [class*='#eef2ff'],
+:root[data-theme='dark'] .workspace-app [class*='rgba(255,255,255'],
+:root[data-theme='dark'] .workspace-app [class*='rgba(255,_255,_255'],
+:root[data-theme='dark'] .workspace-app [class*='rgba(248,250,252'],
+:root[data-theme='dark'] .workspace-app [class*='rgba(247,250,255'],
+:root[data-theme='dark'] .workspace-app [class*='rgba(246,249,255'],
+:root[data-theme='dark'] .workspace-app [class*='rgba(244,248,255'],
+:root[data-theme='dark'] .workspace-app [class*='rgba(238,242,255'] {
+  background: var(--app-surface) !important;
+}
+
+:root[data-theme='dark'] .workspace-app :is(
+  .text-slate-950,
+  .text-slate-900,
+  .text-slate-800,
+  .text-slate-700,
+  .text-\[var\(--color-text\)\]
+) {
+  color: var(--app-text) !important;
+}
+
+:root[data-theme='dark'] .workspace-app :is(
+  .text-slate-600,
+  .text-slate-500,
+  .text-slate-400,
+  .text-\[var\(--color-text-soft\)\]
+) {
+  color: var(--app-text-muted) !important;
+}
+
+:root[data-theme='dark'] .workspace-app :is(
+  .border-white\/80,
+  .border-white\/70,
+  .border-slate-200,
+  .border-slate-300,
+  .border-\[var\(--color-border\)\]
+) {
+  border-color: var(--app-border) !important;
+}
+
+:root[data-theme='dark'] .workspace-app :is(input, select, textarea) {
+  background: var(--app-surface-raised) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+:root[data-theme='dark'] .workspace-app :is(input, select, textarea)::placeholder {
+  color: var(--app-text-faint) !important;
 }
 
 @keyframes fade-up {

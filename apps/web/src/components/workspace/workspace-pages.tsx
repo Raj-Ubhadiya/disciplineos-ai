@@ -62,8 +62,8 @@ function FilterChip({
       onClick={onClick}
       className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
         active
-          ? 'bg-slate-950 text-white'
-          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          ? 'bg-[var(--app-primary)] text-[var(--app-primary-text)]'
+          : 'bg-[var(--app-surface-muted)] text-[var(--app-text-muted)] hover:bg-[var(--app-border)]'
       }`}
     >
       {label}
@@ -79,9 +79,9 @@ function DetailRow({
   value: string;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3">
-      <span className="text-sm text-slate-600">{label}</span>
-      <span className="text-sm font-semibold text-slate-950">{value}</span>
+    <div className="flex items-center justify-between rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-4 py-3">
+      <span className="text-sm text-[var(--app-text-muted)]">{label}</span>
+      <span className="text-sm font-semibold text-[var(--app-text)]">{value}</span>
     </div>
   );
 }
@@ -119,13 +119,13 @@ export function DashboardPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/app/today"
-              className="inline-flex min-h-11 items-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white"
+              className="inline-flex min-h-11 items-center rounded-lg bg-[var(--app-primary)] px-4 text-sm font-semibold text-[var(--app-primary-text)] hover:bg-[var(--app-primary-hover)]"
             >
               Today plan
             </Link>
             <Link
               href="/app/focus-sessions"
-              className="inline-flex min-h-11 items-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700"
+              className="inline-flex min-h-11 items-center rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-4 text-sm font-semibold text-[var(--app-text)] hover:bg-[var(--app-surface-muted)]"
             >
               Start focus
             </Link>
@@ -159,19 +159,19 @@ export function DashboardPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
-        <Card className="rounded-xl border-slate-200 bg-white p-5 shadow-sm">
+        <Card className="rounded-xl border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow)]">
           <SectionTitle
             title="Next action"
             copy="Keep the next move specific enough to start."
             action={
-              <Link href="/app/today" className="text-sm font-semibold text-indigo-700">
+              <Link href="/app/today" className="text-sm font-semibold text-[var(--app-primary)]">
                 Edit plan
               </Link>
             }
           />
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <p className="text-xl font-semibold text-slate-950">{topAction}</p>
-            <p className="mt-2 text-sm leading-6 text-slate-600">
+          <div className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4">
+            <p className="text-xl font-semibold text-[var(--app-text)]">{topAction}</p>
+            <p className="mt-2 text-sm leading-6 text-[var(--app-text-muted)]">
               {dailyPlan?.primaryGoal?.whyItMatters ?? morningAction}
             </p>
           </div>
@@ -184,29 +184,29 @@ export function DashboardPage() {
                 dailyPlan?.latestReflection?.tomorrowCommitment ?? 'Write a short review tonight',
               ],
             ].map(([label, value]) => (
-              <div key={label} className="rounded-lg border border-slate-200 bg-white p-4">
-                <p className="text-xs font-semibold text-slate-500">{label}</p>
-                <p className="mt-2 text-sm font-medium leading-6 text-slate-900">{value}</p>
+              <div key={label} className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] p-4">
+                <p className="text-xs font-semibold text-[var(--app-text-muted)]">{label}</p>
+                <p className="mt-2 text-sm font-medium leading-6 text-[var(--app-text)]">{value}</p>
               </div>
             ))}
           </div>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
               href="/app/focus-sessions"
-              className="inline-flex min-h-11 items-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white"
+              className="inline-flex min-h-11 items-center rounded-lg bg-[var(--app-primary)] px-4 text-sm font-semibold text-[var(--app-primary-text)] hover:bg-[var(--app-primary-hover)]"
             >
-              Start focus session
+              <span>Start focus session</span>
             </Link>
             <Link
               href="/app/habits"
-              className="inline-flex min-h-11 items-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700"
+              className="inline-flex min-h-11 items-center rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-4 text-sm font-semibold text-[var(--app-text)] hover:bg-[var(--app-surface-muted)]"
             >
               Complete habit
             </Link>
           </div>
         </Card>
 
-        <Card className="rounded-xl border-slate-200 bg-white p-5 shadow-sm">
+        <Card className="rounded-xl border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow)]">
           <SectionTitle title="Momentum" copy="Useful signals, not noise." />
           <div className="grid gap-3">
             <DetailRow
@@ -224,7 +224,7 @@ export function DashboardPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-        <Card className="rounded-xl border-slate-200 bg-white p-5 shadow-sm">
+        <Card className="rounded-xl border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow)]">
           <SectionTitle title="Quick actions" copy="Common actions should be one click away." />
           <div className="grid gap-2">
             {([
@@ -236,30 +236,30 @@ export function DashboardPage() {
               <Link
                 key={href}
                 href={href}
-                className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-300 hover:bg-slate-50"
+                className="flex items-center justify-between rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-4 py-3 text-sm font-semibold text-[var(--app-text)] transition hover:border-[var(--app-border-strong)] hover:bg-[var(--app-surface-muted)]"
               >
                 <span>{label}</span>
-                <span className="text-slate-400">Open</span>
+                <span className="text-[var(--app-text-faint)]">Open</span>
               </Link>
             ))}
           </div>
         </Card>
 
-        <Card className="rounded-xl border-slate-200 bg-white p-5 shadow-sm">
+        <Card className="rounded-xl border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow)]">
           <SectionTitle title="Recent activity" copy="The latest saved progress." />
           {recentActivity.length ? (
             <div className="grid gap-3">
               {recentActivity.map((item) => (
                 <div
                   key={`${item.title}-${item.timestamp}`}
-                  className="rounded-lg border border-slate-200 bg-white p-4"
+                  className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] p-4"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <p className="font-semibold text-slate-950">{item.title}</p>
-                      <p className="mt-1 text-sm leading-6 text-slate-600">{item.detail}</p>
+                      <p className="font-semibold text-[var(--app-text)]">{item.title}</p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--app-text-muted)]">{item.detail}</p>
                     </div>
-                    <p className="text-xs text-slate-400">{formatDateTime(item.timestamp)}</p>
+                    <p className="text-xs text-[var(--app-text-faint)]">{formatDateTime(item.timestamp)}</p>
                   </div>
                 </div>
               ))}
@@ -640,7 +640,7 @@ export function GoalsPage() {
                     <span className="rounded-full bg-indigo-100 px-3 py-1 font-semibold text-indigo-700">
                       {goal.status}
                     </span>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-slate-700">
+                    <span className="rounded-full bg-[var(--app-surface-muted)] px-3 py-1 font-semibold text-[var(--app-text-muted)]">
                       {goal.category}
                     </span>
                     {goal.relationship ? (
@@ -832,7 +832,7 @@ export function FocusSessionsPage() {
                 placeholder="What should this session help you finish?"
               />
             </Field>
-            <label className="flex items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-sm text-[var(--color-text)]">
+            <label className="flex items-center gap-3 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] px-4 py-3 text-sm text-[var(--app-text)]">
               <input
                 type="checkbox"
                 checked={form.distractionFree}

@@ -25,11 +25,11 @@ export function Button({
         'inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-semibold leading-none whitespace-nowrap transition duration-200',
         'disabled:cursor-not-allowed disabled:opacity-55',
         variant === 'primary' &&
-          'bg-slate-950 text-white shadow-sm hover:bg-slate-800',
+          'bg-[var(--app-primary)] text-[var(--app-primary-text)] shadow-sm hover:bg-[var(--app-primary-hover)]',
         variant === 'secondary' &&
-          'border border-[var(--color-border)] bg-white text-slate-900 shadow-sm hover:border-[var(--color-border-strong)] hover:bg-slate-50',
+          'border border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-text)] shadow-sm hover:border-[var(--app-border-strong)] hover:bg-[var(--app-surface-muted)]',
         variant === 'ghost' &&
-          'bg-transparent text-slate-700 hover:bg-white/85 hover:text-slate-950',
+          'bg-transparent text-[var(--app-text-muted)] hover:bg-[var(--app-surface-muted)] hover:text-[var(--app-text)]',
         variant === 'danger' &&
           'bg-rose-600 text-white shadow-sm hover:bg-rose-700',
         className,
@@ -56,11 +56,11 @@ export function ButtonLink({
       className={cx(
         'inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-semibold leading-none whitespace-nowrap transition duration-200',
         variant === 'primary' &&
-          'bg-slate-950 text-white shadow-sm hover:bg-slate-800',
+          'bg-[var(--app-primary)] text-[var(--app-primary-text)] shadow-sm hover:bg-[var(--app-primary-hover)]',
         variant === 'secondary' &&
-          'border border-[var(--color-border)] bg-white text-slate-900 shadow-sm hover:border-[var(--color-border-strong)] hover:bg-slate-50',
+          'border border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-text)] shadow-sm hover:border-[var(--app-border-strong)] hover:bg-[var(--app-surface-muted)]',
         variant === 'ghost' &&
-          'bg-transparent text-slate-700 hover:bg-white/85 hover:text-slate-950',
+          'bg-transparent text-[var(--app-text-muted)] hover:bg-[var(--app-surface-muted)] hover:text-[var(--app-text)]',
         className,
       )}
     >
@@ -77,7 +77,7 @@ export function Card({
   return (
     <div
       className={cx(
-        'rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm',
+        'rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow)]',
         className,
       )}
       {...props}
@@ -98,9 +98,9 @@ export function Badge({
     <span
       className={cx(
         'inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-semibold',
-        tone === 'neutral' && 'bg-slate-100 text-slate-700',
-        tone === 'brand' && 'bg-indigo-100 text-indigo-700',
-        tone === 'success' && 'bg-emerald-100 text-emerald-700',
+        tone === 'neutral' && 'bg-[var(--app-surface-muted)] text-[var(--app-text-muted)]',
+        tone === 'brand' && 'bg-[var(--app-primary-soft)] text-[var(--app-primary)]',
+        tone === 'success' && 'bg-[var(--app-success-soft)] text-[var(--app-success)]',
         tone === 'warning' && 'bg-amber-100 text-amber-700',
       )}
     >
@@ -113,7 +113,7 @@ export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElem
   return (
     <input
       className={cx(
-        'min-h-11 w-full rounded-lg border border-[var(--color-border)] bg-white px-3 text-sm text-[var(--color-text)] outline-none transition placeholder:text-slate-400',
+        'min-h-11 w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-3 text-sm text-[var(--app-text)] outline-none transition placeholder:text-[var(--app-text-faint)]',
         'focus:border-[var(--color-brand)] focus:ring-4 focus:ring-indigo-100',
         className,
       )}
@@ -130,7 +130,7 @@ export function Select({
   return (
     <select
       className={cx(
-        'min-h-11 w-full rounded-lg border border-[var(--color-border)] bg-white px-3 text-sm text-[var(--color-text)] outline-none transition',
+        'min-h-11 w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-3 text-sm text-[var(--app-text)] outline-none transition',
         'focus:border-[var(--color-brand)] focus:ring-4 focus:ring-indigo-100',
         className,
       )}
@@ -145,7 +145,7 @@ export function Textarea({ className, ...props }: TextareaHTMLAttributes<HTMLTex
   return (
     <textarea
       className={cx(
-        'min-h-28 w-full rounded-lg border border-[var(--color-border)] bg-white px-3 py-3 text-sm text-[var(--color-text)] outline-none transition placeholder:text-slate-400',
+        'min-h-28 w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-3 text-sm text-[var(--app-text)] outline-none transition placeholder:text-[var(--app-text-faint)]',
         'focus:border-[var(--color-brand)] focus:ring-4 focus:ring-indigo-100',
         className,
       )}
@@ -165,18 +165,18 @@ export function Field({
 }) {
   return (
     <label className="grid gap-2.5">
-      <span className="text-sm font-medium text-[var(--color-text)]">{label}</span>
+      <span className="text-sm font-medium text-[var(--app-text)]">{label}</span>
       {children}
-      {hint ? <span className="text-xs text-[var(--color-text-soft)]">{hint}</span> : null}
+      {hint ? <span className="text-xs text-[var(--app-text-muted)]">{hint}</span> : null}
     </label>
   );
 }
 
 export function ProgressBar({ value }: { value: number }) {
   return (
-    <div className="h-3 rounded-full bg-slate-100">
+    <div className="h-3 rounded-full bg-[var(--app-surface-muted)]">
       <div
-        className="h-3 rounded-full bg-[linear-gradient(90deg,#4f46e5_0%,#7c3aed_48%,#0ea5e9_100%)] transition-all duration-500"
+        className="h-3 rounded-full bg-[var(--app-primary)] transition-all duration-500"
         style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
       />
     </div>
@@ -195,8 +195,10 @@ export function Toast({
     <div
       className={cx(
         'pointer-events-auto rounded-lg border px-4 py-3 shadow-lg backdrop-blur-xl',
-        tone === 'neutral' && 'border-indigo-200/80 bg-white/95 text-slate-700',
-        tone === 'success' && 'border-emerald-200 bg-emerald-50/95 text-emerald-800',
+        tone === 'neutral' &&
+          'border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-text)]',
+        tone === 'success' &&
+          'border-emerald-200 bg-[var(--app-success-soft)] text-[var(--app-success)]',
         tone === 'error' && 'border-rose-200 bg-rose-50/95 text-rose-800',
         className,
       )}
