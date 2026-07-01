@@ -3,8 +3,8 @@ services:
     name: disciplineos-api
     runtime: node
     plan: starter
-    buildCommand: corepack enable && corepack pnpm install --frozen-lockfile && corepack pnpm --filter @disciplineos/api prisma:generate && corepack pnpm --filter @disciplineos/api build
-    startCommand: corepack pnpm --filter @disciplineos/api start:prod
+    buildCommand: corepack pnpm install --frozen-lockfile && corepack pnpm --filter @disciplineos/api prisma:generate && corepack pnpm --filter @disciplineos/api build
+    startCommand: corepack pnpm --filter @disciplineos/api prisma:deploy && corepack pnpm --filter @disciplineos/api start:prod
     healthCheckPath: /api/v1/health
     envVars:
       - key: NODE_ENV
@@ -23,5 +23,11 @@ services:
         value: 3600
       - key: SWAGGER_ENABLED
         value: false
+      - key: AUTH_FROM_EMAIL
+        sync: false
+      - key: AUTH_FROM_NAME
+        value: DisciplineOS AI
+      - key: AUTH_RESEND_API_KEY
+        sync: false
       - key: OPENAI_API_KEY
         sync: false

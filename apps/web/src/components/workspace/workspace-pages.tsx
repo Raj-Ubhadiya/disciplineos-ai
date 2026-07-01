@@ -60,10 +60,10 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+      className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
         active
-          ? 'bg-indigo-100 text-indigo-700 shadow-[inset_0_0_0_1px_rgba(99,102,241,0.08)]'
-          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          ? 'bg-[var(--app-primary)] text-[var(--app-primary-text)]'
+          : 'bg-[var(--app-surface-muted)] text-[var(--app-text-muted)] hover:bg-[var(--app-border)]'
       }`}
     >
       {label}
@@ -79,9 +79,9 @@ function DetailRow({
   value: string;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-[22px] border border-white/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(246,249,255,0.92)_100%)] px-4 py-3 shadow-[0_16px_34px_rgba(15,23,42,0.05)]">
-      <span className="text-sm text-slate-600">{label}</span>
-      <span className="text-sm font-semibold text-slate-950">{value}</span>
+    <div className="flex items-center justify-between rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-4 py-3">
+      <span className="text-sm text-[var(--app-text-muted)]">{label}</span>
+      <span className="text-sm font-semibold text-[var(--app-text)]">{value}</span>
     </div>
   );
 }
@@ -110,123 +110,28 @@ export function DashboardPage() {
     dailyPlan?.nextHabits[0]?.title ?? dailyPlan?.primaryGoal?.title ?? 'Pick one clear target for today';
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-5">
       <PageHeader
         eyebrow="Dashboard"
-        title={`Welcome back${user?.name ? `, ${user.name}` : ''}`}
-        description="See today's priority, protect one focus block, and keep momentum steady."
+        title={`Today${user?.name ? ` for ${user.name.split(' ')[0]}` : ''}`}
+        description="A compact view of your next action, focus progress, and daily discipline signals."
         action={
           <div className="flex flex-wrap gap-3">
             <Link
               href="/app/today"
-              className="rounded-2xl bg-[linear-gradient(135deg,var(--color-brand)_0%,var(--color-brand-secondary)_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_45px_rgba(79,70,229,0.22)]"
+              className="inline-flex min-h-11 items-center rounded-lg bg-[var(--app-primary)] px-4 text-sm font-semibold text-[var(--app-primary-text)] hover:bg-[var(--app-primary-hover)]"
             >
-              Open today plan
+              Today plan
             </Link>
             <Link
               href="/app/focus-sessions"
-              className="rounded-2xl border border-white/80 bg-white/80 px-5 py-3 text-sm font-semibold text-[var(--color-text)] shadow-[0_14px_32px_rgba(15,23,42,0.06)] backdrop-blur"
+              className="inline-flex min-h-11 items-center rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-4 text-sm font-semibold text-[var(--app-text)] hover:bg-[var(--app-surface-muted)]"
             >
-              Start focus session
+              Start focus
             </Link>
           </div>
         }
       />
-
-      <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-        <Card className="relative overflow-hidden border-indigo-300/35 bg-[linear-gradient(135deg,#101a44_0%,#2e3ec8_52%,#5f6dff_100%)] text-white shadow-[0_30px_90px_rgba(67,56,202,0.26)]">
-          <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.95)_50%,transparent_100%)]" />
-          <div className="absolute -right-10 top-0 h-40 w-40 rounded-full bg-white/14 blur-3xl" />
-          <div className="absolute bottom-0 left-10 h-36 w-36 rounded-full bg-cyan-300/16 blur-3xl" />
-          <div className="absolute right-10 top-16 h-24 w-24 rounded-full border border-white/12 bg-white/6 blur-2xl" />
-          <div className="relative grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-            <div>
-              <div className="inline-flex items-center rounded-full border border-white/14 bg-white/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-indigo-100 backdrop-blur">
-                Today&apos;s priority
-              </div>
-              <h2 className="mt-3 text-3xl font-black tracking-[-0.04em]">
-                {dailyPlan?.headline ?? 'Choose one meaningful win before the day gets noisy.'}
-              </h2>
-              <p className="mt-4 max-w-xl text-sm leading-7 text-indigo-100">
-                {dailyPlan?.primaryGoal?.whyItMatters ??
-                  'Make the next action obvious, small enough to finish, and linked to something that matters.'}
-              </p>
-
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[24px] border border-white/12 bg-white/10 p-4 backdrop-blur-sm">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-indigo-100">Focus score</p>
-                  <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-white">{focusScore}</p>
-                </div>
-                <div className="rounded-[24px] border border-white/12 bg-white/10 p-4 backdrop-blur-sm">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-indigo-100">Current streak</p>
-                  <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-white">{streak}</p>
-                </div>
-                <div className="rounded-[24px] border border-white/12 bg-white/10 p-4 backdrop-blur-sm">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-indigo-100">Focus minutes</p>
-                  <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-white">{focusMinutes}</p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  href="/app/focus-sessions"
-                  className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-indigo-700 shadow-[0_16px_36px_rgba(255,255,255,0.18)]"
-                >
-                  Start focus
-                </Link>
-                <Link
-                  href="/app/habits"
-                  className="rounded-2xl border border-white/18 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur"
-                >
-                  Review habits
-                </Link>
-              </div>
-            </div>
-
-            <div className="grid gap-3">
-              {[
-                ['Start here', morningAction],
-                ['Focus block', `${dailyPlan?.focusMinutesDone ?? 0}/${dailyPlan?.focusMinutes ?? 25} minutes protected`],
-                [
-                  'Close the day',
-                  dailyPlan?.latestReflection?.tomorrowCommitment ??
-                    'Write one sentence about what would make today feel complete.',
-                ],
-              ].map(([label, value], index) => (
-                <div
-                  key={label}
-                  className="rounded-[24px] border border-white/12 bg-white/10 p-4 backdrop-blur-sm"
-                >
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-indigo-100">
-                    Step {index + 1}
-                  </p>
-                  <p className="mt-2 text-base font-semibold text-white">{label}</p>
-                  <p className="mt-2 text-sm leading-6 text-indigo-100">{value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Card>
-
-        <Card className="border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f7f9ff_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-          <SectionTitle
-            title="Momentum snapshot"
-            copy="The essentials for today."
-          />
-          <div className="grid gap-3">
-            <DetailRow
-              label="Active goals"
-              value={formatGoalCount(analyticsSummary?.activeGoals ?? goals.length)}
-            />
-            <DetailRow
-              label="Focus minutes"
-              value={`${focusSessionSummary?.totalMinutes ?? 0} minutes logged`}
-            />
-            <DetailRow label="Reflections" value={`${reflections.length} entries saved`} />
-            <DetailRow label="Habits" value={`${habits.length} active habits`} />
-          </div>
-        </Card>
-      </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard
@@ -253,95 +158,138 @@ export function DashboardPage() {
         />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-        <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
+      <div className="grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
+        <Card className="rounded-xl border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow)]">
           <SectionTitle
-            title="Quick actions"
-            copy="Jump into the next action."
+            title="Next action"
+            copy="Keep the next move specific enough to start."
+            action={
+              <Link href="/app/today" className="text-sm font-semibold text-[var(--app-primary)]">
+                Edit plan
+              </Link>
+            }
           />
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4">
+            <p className="text-xl font-semibold text-[var(--app-text)]">{topAction}</p>
+            <p className="mt-2 text-sm leading-6 text-[var(--app-text-muted)]">
+              {dailyPlan?.primaryGoal?.whyItMatters ?? morningAction}
+            </p>
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {[
+              ['Start', morningAction],
+              ['Focus', `${dailyPlan?.focusMinutesDone ?? 0}/${dailyPlan?.focusMinutes ?? 25} minutes`],
+              [
+                'Reflect',
+                dailyPlan?.latestReflection?.tomorrowCommitment ?? 'Write a short review tonight',
+              ],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] p-4">
+                <p className="text-xs font-semibold text-[var(--app-text-muted)]">{label}</p>
+                <p className="mt-2 text-sm font-medium leading-6 text-[var(--app-text)]">{value}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href="/app/focus-sessions"
+              className="inline-flex min-h-11 items-center rounded-lg bg-[var(--app-primary)] px-4 text-sm font-semibold text-[var(--app-primary-text)] hover:bg-[var(--app-primary-hover)]"
+            >
+              <span>Start focus session</span>
+            </Link>
+            <Link
+              href="/app/habits"
+              className="inline-flex min-h-11 items-center rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-4 text-sm font-semibold text-[var(--app-text)] hover:bg-[var(--app-surface-muted)]"
+            >
+              Complete habit
+            </Link>
+          </div>
+        </Card>
+
+        <Card className="rounded-xl border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow)]">
+          <SectionTitle title="Momentum" copy="Useful signals, not noise." />
+          <div className="grid gap-3">
+            <DetailRow
+              label="Active goals"
+              value={formatGoalCount(analyticsSummary?.activeGoals ?? goals.length)}
+            />
+            <DetailRow label="Habits" value={`${habits.length} active`} />
+            <DetailRow label="Reflections" value={`${reflections.length} saved`} />
+            <DetailRow
+              label="Reflection average"
+              value={`${analyticsSummary?.averageReflectionScore ?? 0}`}
+            />
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+        <Card className="rounded-xl border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow)]">
+          <SectionTitle title="Quick actions" copy="Common actions should be one click away." />
+          <div className="grid gap-2">
             {([
-              ['Complete habit', '/app/habits'],
               ['Open today plan', '/app/today'],
+              ['Complete habit', '/app/habits'],
               ['Write reflection', '/app/reflections'],
-              ['Adjust profile', '/app/profile'],
+              ['Update profile', '/app/profile'],
             ] as const).map(([label, href]) => (
               <Link
                 key={href}
                 href={href}
-                className="group rounded-[28px] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f4f8ff_100%)] p-5 text-sm font-semibold text-[var(--color-text)] shadow-[0_14px_36px_rgba(15,23,42,0.05)] transition hover:-translate-y-1 hover:shadow-[0_20px_44px_rgba(23,32,51,0.1)]"
+                className="flex items-center justify-between rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-4 py-3 text-sm font-semibold text-[var(--app-text)] transition hover:border-[var(--app-border-strong)] hover:bg-[var(--app-surface-muted)]"
               >
-                <span className="block text-base text-slate-950">{label}</span>
-                <span className="mt-2 block text-xs font-medium uppercase tracking-[0.18em] text-slate-400 transition group-hover:text-indigo-600">
-                  Open page
-                </span>
+                <span>{label}</span>
+                <span className="text-[var(--app-text-faint)]">Open</span>
               </Link>
             ))}
           </div>
         </Card>
 
-        <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-          <SectionTitle
-            title="Today&apos;s target"
-            copy="Keep one outcome visible."
-          />
-          <div className="rounded-[28px] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f7f9ff_100%)] p-5 shadow-[0_14px_34px_rgba(15,23,42,0.05)]">
-            <p className="text-lg font-semibold text-[var(--color-text)]">{topAction}</p>
-            <p className="mt-3 text-sm leading-7 text-[var(--color-text-soft)]">
-              {dailyPlan?.primaryGoal?.whyItMatters ??
-                'Choose one clear goal so the day feels directed instead of scattered.'}
-            </p>
-            <div className="mt-5 grid gap-3">
-              <DetailRow
-                label="Active goals"
-                value={formatGoalCount(analyticsSummary?.activeGoals ?? goals.length)}
-              />
-              <DetailRow
-                label="Reflection average"
-                value={`${analyticsSummary?.averageReflectionScore ?? 0}`}
-              />
+        <Card className="rounded-xl border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow)]">
+          <SectionTitle title="Recent activity" copy="The latest saved progress." />
+          {recentActivity.length ? (
+            <div className="grid gap-3">
+              {recentActivity.map((item) => (
+                <div
+                  key={`${item.title}-${item.timestamp}`}
+                  className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] p-4"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold text-[var(--app-text)]">{item.title}</p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--app-text-muted)]">{item.detail}</p>
+                    </div>
+                    <p className="text-xs text-[var(--app-text-faint)]">{formatDateTime(item.timestamp)}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <EmptyState
+              title="No recent activity yet"
+              copy="Start one habit or one focus session to begin."
+              ctaHref="/app/today"
+              ctaLabel="Open today plan"
+            />
+          )}
         </Card>
       </div>
-
-      <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-        <SectionTitle title="Recent activity" copy="Your latest updates." />
-        {recentActivity.length ? (
-          <div className="grid gap-3 md:grid-cols-3">
-            {recentActivity.map((item) => (
-              <div
-                key={`${item.title}-${item.timestamp}`}
-                className="rounded-[28px] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f7f9ff_100%)] p-4 shadow-[0_14px_34px_rgba(15,23,42,0.05)]"
-              >
-                <p className="font-semibold text-[var(--color-text)]">{item.title}</p>
-                <p className="mt-2 text-sm text-[var(--color-text-soft)]">{item.detail}</p>
-                <p className="mt-3 text-xs uppercase tracking-[0.18em] text-slate-400">
-                  {formatDateTime(item.timestamp)}
-                </p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <EmptyState
-            title="No recent activity yet"
-            copy="Start one habit or one focus session to begin."
-            ctaHref="/app/today"
-            ctaLabel="Open today plan"
-          />
-        )}
-      </Card>
     </div>
   );
 }
 
 export function TodayPlanPage() {
   const { dailyPlan, reminders, completeReminder } = useWorkspace();
+  const hasPriorityGoal = Boolean(dailyPlan?.primaryGoal);
+  const hasHabit = Boolean(dailyPlan?.nextHabits.length);
+  const isNewUser = !hasPriorityGoal && !hasHabit;
 
   const progress =
     dailyPlan && dailyPlan.focusMinutes > 0
       ? (dailyPlan.focusMinutesDone / dailyPlan.focusMinutes) * 100
-      : 20;
+      : isNewUser
+        ? 0
+        : 20;
 
   const steps = [
     {
@@ -377,16 +325,74 @@ export function TodayPlanPage() {
     <div className="grid gap-6">
       <PageHeader
         eyebrow="Today plan"
-        title="Your plan for today"
-        description="Move through the day in a simple order: start, focus, finish, reflect."
+        title={isNewUser ? 'Start with one clear action' : 'Your plan for today'}
+        description={
+          isNewUser
+            ? 'DisciplineOS works best when you choose one goal, one small habit, and one focus block for today.'
+            : 'Move through the day in a simple order: start, focus, finish, reflect.'
+        }
       />
+
+      {isNewUser ? (
+        <Card className="border-[var(--app-border)] bg-[var(--app-surface)] shadow-[var(--app-shadow)]">
+          <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+            <div>
+              <p className="text-sm font-semibold text-[var(--app-primary)]">First time here</p>
+              <h2 className="mt-2 text-2xl font-bold text-[var(--app-text)]">
+                Build today in three small steps.
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-[var(--app-text-muted)]">
+                You do not need to fill everything. Pick one meaningful goal, connect one habit,
+                then protect one focus session. That is enough to start.
+              </p>
+            </div>
+            <div className="grid gap-3 md:grid-cols-3">
+              {[
+                {
+                  step: '1',
+                  title: 'Create goal',
+                  copy: 'Choose what matters today.',
+                  href: '/app/goals',
+                },
+                {
+                  step: '2',
+                  title: 'Add habit',
+                  copy: 'Make it small and repeatable.',
+                  href: '/app/habits',
+                },
+                {
+                  step: '3',
+                  title: 'Start focus',
+                  copy: 'Protect 25 minutes.',
+                  href: '/app/focus-sessions',
+                },
+              ].map((startStep) => (
+                <Link
+                  key={startStep.title}
+                  href={startStep.href}
+                  className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4 transition hover:-translate-y-0.5 hover:border-[var(--app-border-strong)]"
+                >
+                  <span className="flex size-9 items-center justify-center rounded-md bg-[var(--app-primary)] text-sm font-bold text-[var(--app-primary-text)]">
+                    {startStep.step}
+                  </span>
+                  <p className="mt-4 font-semibold text-[var(--app-text)]">{startStep.title}</p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--app-text-muted)]">{startStep.copy}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Card>
+      ) : null}
 
       <Card className="relative overflow-hidden border-indigo-300/35 bg-[linear-gradient(135deg,#171f58_0%,#4f46e5_58%,#22c55e_150%)] text-white shadow-[0_30px_90px_rgba(79,70,229,0.24)]">
         <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.92)_50%,transparent_100%)]" />
         <div className="absolute -right-10 top-0 h-36 w-36 rounded-full bg-white/14 blur-3xl" />
         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-indigo-100">Today&apos;s headline</p>
         <h2 className="mt-3 text-3xl font-black">
-          {dailyPlan?.headline ?? "Generate today's plan after logging in and creating your first goals."}
+          {dailyPlan?.headline ??
+            (isNewUser
+              ? 'Choose one goal, one habit, and one focus block to begin.'
+              : "Generate today's plan after creating your first goals.")}
         </h2>
         <div className="mt-6 max-w-xl">
           <ProgressBar value={progress} />
@@ -396,16 +402,16 @@ export function TodayPlanPage() {
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
-            href="/app/focus-sessions"
+            href={isNewUser ? '/app/goals' : '/app/focus-sessions'}
             className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-indigo-700 shadow-[0_16px_36px_rgba(255,255,255,0.18)]"
           >
-            Start focus session
+            {isNewUser ? 'Create first goal' : 'Start focus session'}
           </Link>
           <Link
-            href="/app/reflections"
+            href={isNewUser ? '/app/habits' : '/app/reflections'}
             className="rounded-2xl border border-white/18 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur"
           >
-            Write reflection
+            {isNewUser ? 'Add first habit' : 'Write reflection'}
           </Link>
         </div>
       </Card>
@@ -419,7 +425,16 @@ export function TodayPlanPage() {
 
         <div className="grid gap-4">
           <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-            <SectionTitle title="Today's priority goal" />
+            <SectionTitle
+              title="Today's priority goal"
+              action={
+                !hasPriorityGoal ? (
+                  <Link href="/app/goals" className="text-sm font-semibold text-[var(--app-primary)]">
+                    Create goal
+                  </Link>
+                ) : null
+              }
+            />
             <p className="text-lg font-semibold text-[var(--color-text)]">
               {dailyPlan?.primaryGoal?.title ?? 'No priority goal selected yet'}
             </p>
@@ -447,7 +462,8 @@ export function TodayPlanPage() {
           <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(247,250,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
             <SectionTitle title="Reminder list" />
             <div className="grid gap-3">
-              {(dailyPlan?.dueReminders ?? reminders.slice(0, 3)).map((reminder) => (
+              {(dailyPlan?.dueReminders ?? reminders.slice(0, 3)).length ? (
+                (dailyPlan?.dueReminders ?? reminders.slice(0, 3)).map((reminder) => (
                 <div
                   key={reminder.id}
                   className="flex flex-wrap items-center justify-between gap-3 rounded-[28px] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f4f8ff_100%)] p-4 shadow-[0_14px_36px_rgba(15,23,42,0.05)]"
@@ -462,7 +478,15 @@ export function TodayPlanPage() {
                     Complete
                   </Button>
                 </div>
-              ))}
+                ))
+              ) : (
+                <div className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4">
+                  <p className="font-semibold text-[var(--app-text)]">No reminders yet</p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--app-text-muted)]">
+                    Start with a goal and habit first. Reminders can come after the basic routine is clear.
+                  </p>
+                </div>
+              )}
             </div>
           </Card>
         </div>
@@ -473,83 +497,222 @@ export function TodayPlanPage() {
 
 export function AiPlannerPage() {
   const { aiPlans, activateAiPlan, createAiPlan, isPending } = useWorkspace();
+  const [mode, setMode] = useState<'discover' | 'direct'>('discover');
   const [form, setForm] = useState({
     dream: '',
     currentSituation: '',
     mainObstacle: 'social media distraction',
     roleModel: '',
   });
+  const [discovery, setDiscovery] = useState({
+    interests: '',
+    strengths: '',
+    problems: '',
+    lifestyle: '',
+    shortTermWindow: 'next 30 days',
+    longTermWindow: 'next 3 years',
+    constraints: '',
+    distractions: 'social media and unclear direction',
+  });
 
   const latestPlan = aiPlans[0];
+  const canGenerateDiscovery =
+    discovery.interests.trim().length > 2 &&
+    discovery.strengths.trim().length > 2 &&
+    discovery.problems.trim().length > 2;
+
+  function generateGoalDiscoveryPlan() {
+    const dream = [
+      'Help me discover my life direction and create discipline goals.',
+      `Interests: ${discovery.interests || 'not sure yet'}.`,
+      `Strengths: ${discovery.strengths || 'still exploring'}.`,
+      `Problems I care about: ${discovery.problems || 'not sure yet'}.`,
+      `Preferred lifestyle: ${discovery.lifestyle || 'balanced and meaningful'}.`,
+      `Create both short-term goals for ${discovery.shortTermWindow} and long-term goals for ${discovery.longTermWindow}.`,
+    ].join(' ');
+
+    createAiPlan({
+      dream,
+      currentSituation: [
+        'The user is still discovering their goal.',
+        discovery.constraints ? `Current limits: ${discovery.constraints}.` : '',
+        'Avoid overwhelming them. Recommend simple, realistic first steps.',
+      ]
+        .filter(Boolean)
+        .join(' '),
+      mainObstacle: discovery.distractions,
+      roleModel: 'a calm, consistent person who builds direction through experiments',
+    });
+  }
 
   return (
     <div className="grid gap-6">
       <PageHeader
         eyebrow="AI planner"
-        title="Generate a discipline plan"
-        description="Turn your goal and obstacle into a practical plan."
+        title="Find or build your next goal"
+        description="Use goal discovery if you are unsure, or generate a discipline plan if you already know what you want."
       />
 
+      <div className="flex flex-wrap gap-2">
+        <FilterChip
+          label="Help me find my goal"
+          active={mode === 'discover'}
+          onClick={() => setMode('discover')}
+        />
+        <FilterChip
+          label="I already know my goal"
+          active={mode === 'direct'}
+          onClick={() => setMode('direct')}
+        />
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
-        <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(246,249,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
-          <SectionTitle
-            title="Plan input"
-            copy="Describe what you want help building."
-          />
-          <div className="mb-5 flex flex-wrap gap-2">
-            {['Ship my portfolio', 'Study without phone relapse', 'Build deep work consistency'].map(
-              (prompt) => (
-                <button
-                  key={prompt}
-                  type="button"
-                  onClick={() => setForm({ ...form, dream: prompt })}
-                  className="rounded-full border border-indigo-100/80 bg-indigo-50/90 px-4 py-2 text-sm font-medium text-indigo-700 transition hover:-translate-y-0.5 hover:bg-indigo-100"
-                >
-                  {prompt}
-                </button>
-              ),
-            )}
-          </div>
-          <div className="grid gap-4">
-            <Field label="Dream">
-              <Textarea
-                value={form.dream}
-                onChange={(event) => setForm({ ...form, dream: event.target.value })}
-                placeholder="Describe the disciplined life or outcome you want."
-              />
-            </Field>
-            <Field label="Current situation">
-              <Input
-                value={form.currentSituation}
-                onChange={(event) => setForm({ ...form, currentSituation: event.target.value })}
-                placeholder="What is true today?"
-              />
-            </Field>
-            <Field label="Main obstacle">
-              <Input
-                value={form.mainObstacle}
-                onChange={(event) => setForm({ ...form, mainObstacle: event.target.value })}
-                placeholder="What keeps breaking momentum?"
-              />
-            </Field>
-            <Field label="Role model">
-              <Input
-                value={form.roleModel}
-                onChange={(event) => setForm({ ...form, roleModel: event.target.value })}
-                placeholder="Optional: who inspires your discipline?"
-              />
-            </Field>
-            <Button type="button" disabled={isPending || form.dream.length < 5} onClick={() => createAiPlan(form)}>
-              {isPending ? 'Generating...' : 'Generate plan'}
-            </Button>
-          </div>
-        </Card>
+        {mode === 'discover' ? (
+          <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(246,249,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
+            <SectionTitle
+              title="AI goal discovery"
+              copy="Answer a few simple questions. The planner will turn your interests into short-term and long-term goals."
+            />
+            <div className="mb-5 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4">
+              <p className="font-semibold text-[var(--app-text)]">Good goals come from patterns.</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--app-text-muted)]">
+                We look at what you enjoy, what you are good at, what problems you care about,
+                and what kind of life you want. Then we create practical direction.
+              </p>
+            </div>
+            <div className="grid gap-4">
+              <Field label="What topics or activities naturally interest you?">
+                <Textarea
+                  value={discovery.interests}
+                  onChange={(event) => setDiscovery({ ...discovery, interests: event.target.value })}
+                  placeholder="Example: technology, fitness, business, design, teaching, helping people..."
+                />
+              </Field>
+              <Field label="What are you already good at, even a little?">
+                <Textarea
+                  value={discovery.strengths}
+                  onChange={(event) => setDiscovery({ ...discovery, strengths: event.target.value })}
+                  placeholder="Example: learning fast, talking to people, coding, writing, discipline, creativity..."
+                />
+              </Field>
+              <Field label="What problems do you care about solving?">
+                <Textarea
+                  value={discovery.problems}
+                  onChange={(event) => setDiscovery({ ...discovery, problems: event.target.value })}
+                  placeholder="Example: financial freedom, career growth, health, family responsibility, confidence..."
+                />
+              </Field>
+              <Field label="What kind of life do you want to build?">
+                <Textarea
+                  value={discovery.lifestyle}
+                  onChange={(event) => setDiscovery({ ...discovery, lifestyle: event.target.value })}
+                  placeholder="Example: independent, healthy, respected, calm, creative, financially stable..."
+                />
+              </Field>
+              <div className="grid gap-4 md:grid-cols-2">
+                <Field label="Short-term goal window">
+                  <Input
+                    value={discovery.shortTermWindow}
+                    onChange={(event) =>
+                      setDiscovery({ ...discovery, shortTermWindow: event.target.value })
+                    }
+                    placeholder="next 30 days"
+                  />
+                </Field>
+                <Field label="Long-term goal window">
+                  <Input
+                    value={discovery.longTermWindow}
+                    onChange={(event) =>
+                      setDiscovery({ ...discovery, longTermWindow: event.target.value })
+                    }
+                    placeholder="next 3 years"
+                  />
+                </Field>
+              </div>
+              <Field label="What limits or distractions should the plan respect?">
+                <Input
+                  value={discovery.distractions}
+                  onChange={(event) => setDiscovery({ ...discovery, distractions: event.target.value })}
+                  placeholder="social media, low confidence, no clear routine..."
+                />
+              </Field>
+              <Field label="Any real-life constraints?">
+                <Input
+                  value={discovery.constraints}
+                  onChange={(event) => setDiscovery({ ...discovery, constraints: event.target.value })}
+                  placeholder="college, job, family, time, money, health..."
+                />
+              </Field>
+              <Button
+                type="button"
+                disabled={isPending || !canGenerateDiscovery}
+                onClick={generateGoalDiscoveryPlan}
+              >
+                {isPending ? 'Finding direction...' : 'Find my goals'}
+              </Button>
+            </div>
+          </Card>
+        ) : (
+          <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(246,249,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
+            <SectionTitle
+              title="Plan input"
+              copy="Describe what you want help building."
+            />
+            <div className="mb-5 flex flex-wrap gap-2">
+              {['Ship my portfolio', 'Study without phone relapse', 'Build deep work consistency'].map(
+                (prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    onClick={() => setForm({ ...form, dream: prompt })}
+                    className="rounded-full border border-indigo-100/80 bg-indigo-50/90 px-4 py-2 text-sm font-medium text-indigo-700 transition hover:-translate-y-0.5 hover:bg-indigo-100"
+                  >
+                    {prompt}
+                  </button>
+                ),
+              )}
+            </div>
+            <div className="grid gap-4">
+              <Field label="Dream">
+                <Textarea
+                  value={form.dream}
+                  onChange={(event) => setForm({ ...form, dream: event.target.value })}
+                  placeholder="Describe the disciplined life or outcome you want."
+                />
+              </Field>
+              <Field label="Current situation">
+                <Input
+                  value={form.currentSituation}
+                  onChange={(event) => setForm({ ...form, currentSituation: event.target.value })}
+                  placeholder="What is true today?"
+                />
+              </Field>
+              <Field label="Main obstacle">
+                <Input
+                  value={form.mainObstacle}
+                  onChange={(event) => setForm({ ...form, mainObstacle: event.target.value })}
+                  placeholder="What keeps breaking momentum?"
+                />
+              </Field>
+              <Field label="Role model">
+                <Input
+                  value={form.roleModel}
+                  onChange={(event) => setForm({ ...form, roleModel: event.target.value })}
+                  placeholder="Optional: who inspires your discipline?"
+                />
+              </Field>
+              <Button type="button" disabled={isPending || form.dream.length < 5} onClick={() => createAiPlan(form)}>
+                {isPending ? 'Generating...' : 'Generate plan'}
+              </Button>
+            </div>
+          </Card>
+        )}
 
         {latestPlan ? (
           <Card className="border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98)_0%,rgba(244,248,255,0.96)_100%)] shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
             <SectionTitle
             title={latestPlan.dream}
-              copy="Review the plan, then activate it."
+              copy="Review the suggested short-term and long-term direction, then activate the plan when it feels useful."
               action={
                 <Button type="button" onClick={() => activateAiPlan(latestPlan.id)} disabled={isPending}>
                   Activate plan
@@ -586,8 +749,8 @@ export function AiPlannerPage() {
           </Card>
         ) : (
           <EmptyState
-            title="No AI plan generated yet"
-            copy="Describe your goal to generate your first plan."
+            title="No direction generated yet"
+            copy="Use goal discovery if you are unsure, or describe a clear goal if you already know it."
           />
         )}
       </div>
@@ -624,6 +787,14 @@ export function GoalsPage() {
         eyebrow="Goals"
         title="Goals that guide the week"
         description="Keep goals clear, practical, and easy to review."
+        action={
+          <Link
+            href="/app/ai-planner"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--app-primary)] px-5 text-sm font-semibold text-[var(--app-primary-text)] transition hover:bg-[var(--app-primary-hover)]"
+          >
+            Help me find a goal
+          </Link>
+        }
       />
 
       <div className="grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
@@ -697,7 +868,7 @@ export function GoalsPage() {
                     <span className="rounded-full bg-indigo-100 px-3 py-1 font-semibold text-indigo-700">
                       {goal.status}
                     </span>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-slate-700">
+                    <span className="rounded-full bg-[var(--app-surface-muted)] px-3 py-1 font-semibold text-[var(--app-text-muted)]">
                       {goal.category}
                     </span>
                     {goal.relationship ? (
@@ -712,7 +883,9 @@ export function GoalsPage() {
           ) : (
             <EmptyState
               title="No goals yet"
-              copy="Create your first goal so your daily work has a clear direction."
+              copy="Create your first goal, or use AI Goal Discovery if you are not sure what direction to choose."
+              ctaHref="/app/ai-planner"
+              ctaLabel="Find my goal"
             />
           )}
         </div>
@@ -889,7 +1062,7 @@ export function FocusSessionsPage() {
                 placeholder="What should this session help you finish?"
               />
             </Field>
-            <label className="flex items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-sm text-[var(--color-text)]">
+            <label className="flex items-center gap-3 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] px-4 py-3 text-sm text-[var(--app-text)]">
               <input
                 type="checkbox"
                 checked={form.distractionFree}

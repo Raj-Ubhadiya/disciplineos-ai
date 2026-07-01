@@ -38,6 +38,7 @@ export const apiEnvSchema = z
     GOOGLE_CLIENT_ID: z.string().optional(),
     AUTH_FROM_EMAIL: z.string().email().optional(),
     AUTH_FROM_NAME: z.string().optional(),
+    AUTH_RESEND_API_KEY: z.string().optional(),
     AUTH_SMTP_HOST: z.string().optional(),
     AUTH_SMTP_PORT: z.coerce.number().int().positive().default(587),
     AUTH_SMTP_SECURE: booleanFromEnv.default(false),

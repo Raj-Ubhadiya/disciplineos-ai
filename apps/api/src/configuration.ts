@@ -17,6 +17,7 @@ export const configuration = () => {
       googleClientId: env.GOOGLE_CLIENT_ID,
       fromEmail: env.AUTH_FROM_EMAIL,
       fromName: env.AUTH_FROM_NAME,
+      resendApiKey: env.AUTH_RESEND_API_KEY,
       smtpHost: env.AUTH_SMTP_HOST,
       smtpPort: env.AUTH_SMTP_PORT,
       smtpSecure: env.AUTH_SMTP_SECURE,
