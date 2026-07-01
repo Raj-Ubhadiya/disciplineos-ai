@@ -17,6 +17,7 @@ import { ProfileModule } from './profile/profile.module';
 import { ReflectionsModule } from './reflections';
 import { RelationshipsModule } from './relationships';
 import { RemindersModule } from './reminders';
+import { RootController } from './root.controller';
 
 @Module({
   imports: [
@@ -40,7 +41,7 @@ import { RemindersModule } from './reminders';
     DailyPlanModule,
     ReflectionsModule,
   ],
-  controllers: [HealthController],
+  controllers: [HealthController, RootController],
   providers: [HealthService],
 })
 export class AppModule {}

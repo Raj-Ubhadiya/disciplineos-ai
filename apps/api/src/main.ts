@@ -20,7 +20,9 @@ async function bootstrap() {
     },
   });
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', {
+    exclude: ['/'],
+  });
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
