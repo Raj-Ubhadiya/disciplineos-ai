@@ -461,11 +461,28 @@ export class AuthService {
   }
 
   private async sendOtpEmail(email: string, code: string, purpose: AuthPurpose): Promise<boolean> {
-    const transporter = this.getMailTransporter();
     const fromEmail =
       this.configService.get<string | undefined>('auth.fromEmail') ?? 'no-reply@disciplineos.local';
     const fromName =
       this.configService.get<string | undefined>('auth.fromName') ?? 'DisciplineOS AI';
+    const resendApiKey = this.configService.get<string | undefined>('auth.resendApiKey');
+
+    if (resendApiKey) {
+      const deliveredByResend = await this.sendOtpEmailWithResend(
+        resendApiKey,
+        fromEmail,
+        fromName,
+        email,
+        code,
+        purpose,
+      );
+
+      if (deliveredByResend) {
+        return true;
+      }
+    }
+
+    const transporter = this.getMailTransporter();
 
     if (!transporter) {
       this.logger.warn(`Email OTP for ${email}: ${code}`);
@@ -493,6 +510,53 @@ export class AuthService {
       const message = error instanceof Error ? error.message : String(error);
       this.logger.error(`Failed to send OTP email: ${message}`);
       this.logger.warn(`Email OTP fallback for ${email}: ${code}`);
+      return false;
+    }
+
+    return true;
+  }
+
+  private async sendOtpEmailWithResend(
+    resendApiKey: string,
+    fromEmail: string,
+    fromName: string,
+    email: string,
+    code: string,
+    purpose: AuthPurpose,
+  ): Promise<boolean> {
+    try {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: `${fromName} <${fromEmail}>`,
+          to: [email],
+          subject:
+            purpose === 'login' ? 'Your DisciplineOS AI login code' : 'Verify your DisciplineOS AI account',
+          text:
+            purpose === 'login'
+              ? `Your DisciplineOS AI login code is ${code}. It expires in ${this.getOtpTtlMinutes()} minutes.`
+              : `Your DisciplineOS AI signup code is ${code}. It expires in ${this.getOtpTtlMinutes()} minutes.`,
+          html: `<div style="font-family:Arial,sans-serif;color:#172033">
+  <h2>Your DisciplineOS AI verification code</h2>
+  <p>Use this code to ${purpose === 'login' ? 'log in' : 'finish creating your account'}:</p>
+  <p style="font-size:32px;font-weight:700;letter-spacing:8px">${code}</p>
+  <p>This code expires in ${this.getOtpTtlMinutes()} minutes.</p>
+</div>`,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        this.logger.error(`Failed to send OTP email with Resend: ${errorText}`);
+        return false;
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(`Failed to send OTP email with Resend: ${message}`);
       return false;
     }
 
